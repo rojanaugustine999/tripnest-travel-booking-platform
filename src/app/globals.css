@@ -1,62 +1,240 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /*
- * TripNest design tokens.
- * Brand: deep ocean teal (primary) + warm sunset coral (accent) on soft sand neutrals.
+ * TripNest design tokens
+ * ----------------------
+ * Brand scales: navy (primary), lagoon (teal, secondary), coral (accent / call to action).
+ * Neutrals use Tailwind's slate scale (charcoal text, subtle grey borders).
+ * Every text/background pair used by components meets WCAG AA (4.5:1) contrast.
  */
-@theme {
+@theme static {
+  /* Fonts — loaded with next/font in app/layout.tsx */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand-50: #effcfb;
-  --color-brand-100: #c8f5f1;
-  --color-brand-200: #92ebe4;
-  --color-brand-300: #54d9d1;
-  --color-brand-400: #26bfb9;
-  --color-brand-500: #0ea39f;
-  --color-brand-600: #088381;
-  --color-brand-700: #0b6868;
-  --color-brand-800: #0e5354;
-  --color-brand-900: #114546;
-  --color-brand-950: #032829;
+  /* Primary: deep navy */
+  --color-navy-50: #f1f5fb;
+  --color-navy-100: #e1e9f5;
+  --color-navy-200: #c6d5eb;
+  --color-navy-300: #9db7dc;
+  --color-navy-400: #6d92c9;
+  --color-navy-500: #4a72b5;
+  --color-navy-600: #375899;
+  --color-navy-700: #2d477c;
+  --color-navy-800: #233862;
+  --color-navy-900: #172645;
+  --color-navy-950: #0c1730;
 
-  --color-accent-50: #fff4ed;
-  --color-accent-100: #ffe6d4;
-  --color-accent-200: #ffc9a8;
-  --color-accent-300: #ffa370;
-  --color-accent-400: #ff7237;
-  --color-accent-500: #fe4c11;
-  --color-accent-600: #ef3307;
-  --color-accent-700: #c62208;
-  --color-accent-800: #9d1c0f;
-  --color-accent-900: #7e1a10;
+  /* Secondary: lagoon teal */
+  --color-lagoon-50: #effcfa;
+  --color-lagoon-100: #c9f6ef;
+  --color-lagoon-200: #95ecdf;
+  --color-lagoon-300: #59dacb;
+  --color-lagoon-400: #2abfb1;
+  --color-lagoon-500: #12a397;
+  --color-lagoon-600: #0b827a;
+  --color-lagoon-700: #0d6863;
+  --color-lagoon-800: #0f5350;
+  --color-lagoon-900: #114543;
+  --color-lagoon-950: #032928;
 
-  --color-sand-50: #fafaf7;
-  --color-sand-100: #f4f3ee;
+  /* Accent: warm coral */
+  --color-coral-50: #fff4f1;
+  --color-coral-100: #ffe5de;
+  --color-coral-200: #ffcfc2;
+  --color-coral-300: #ffac97;
+  --color-coral-400: #fd7d5d;
+  --color-coral-500: #f4573a;
+  --color-coral-600: #d1391d;
+  --color-coral-700: #b02f16;
+  --color-coral-800: #922a17;
+  --color-coral-900: #7a2819;
 
-  --radius-card: 1.25rem;
+  /* Typography scale: size / line height / letter spacing / weight */
+  --text-display: 3.75rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 800;
+  --text-h1: 2.75rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h1--font-weight: 800;
+  --text-h2: 2rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 700;
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 700;
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+  --text-h4--font-weight: 600;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.7;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.12em;
+  --text-eyebrow--font-weight: 600;
 
+  /* Elevation */
   --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.12);
-  --shadow-card-hover: 0 2px 4px rgb(15 23 42 / 0.06), 0 16px 40px -12px rgb(15 23 42 / 0.2);
+  --shadow-card-hover: 0 2px 4px rgb(15 23 42 / 0.06), 0 18px 40px -12px rgb(15 23 42 / 0.22);
+
+  /* Motion */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-up: fade-up 0.5s var(--ease-smooth) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Semantic tokens consumed by shadcn/ui components (bg-primary, text-muted-foreground, …). */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #1e293b; /* slate-800 charcoal */
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+
+  --primary: var(--color-navy-900);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-lagoon-600);
+  --secondary-foreground: #ffffff;
+  --cta: var(--color-coral-600);
+  --cta-foreground: #ffffff;
+
+  --muted: #f1f5f9; /* slate-100 */
+  --muted-foreground: #64748b; /* slate-500 */
+  /* shadcn "accent" = subtle hover / selected surface, not the coral brand accent */
+  --accent: var(--color-navy-50);
+  --accent-foreground: var(--color-navy-900);
+
+  --destructive: #dc2626;
+  --success: #15803d;
+  --warning: #b45309;
+
+  --border: #e2e8f0; /* slate-200 */
+  --input: #cbd5e1; /* slate-300 */
+  --ring: var(--color-lagoon-500);
+
+  --chart-1: var(--color-navy-700);
+  --chart-2: var(--color-lagoon-500);
+  --chart-3: var(--color-coral-500);
+  --chart-4: #f59e0b;
+  --chart-5: var(--color-navy-300);
+
+  --sidebar: var(--color-navy-950);
+  --sidebar-foreground: #cbd5e1;
+  --sidebar-primary: var(--color-lagoon-400);
+  --sidebar-primary-foreground: var(--color-navy-950);
+  --sidebar-accent: var(--color-navy-900);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: var(--color-lagoon-400);
+}
+
+@theme inline {
+  --font-heading: var(--font-display);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-cta: var(--cta);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-sand-50 font-sans text-slate-800 antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    @apply font-display tracking-tight text-slate-900;
+    @apply font-display text-slate-900;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand-500;
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

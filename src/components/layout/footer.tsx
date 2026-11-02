@@ -7,20 +7,20 @@ import { CurrentYear } from "@/components/layout/current-year";
 
 export function Footer() {
   return (
-    <footer className="bg-brand-950 text-slate-300">
+    <footer className="bg-navy-950 text-slate-300">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <Logo inverted />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">{siteConfig.description}</p>
           <ul className="mt-6 space-y-2 text-sm">
             <li className="flex items-center gap-2">
-              <Mail className="size-4 text-brand-300" aria-hidden="true" />
+              <Mail className="size-4 text-lagoon-300" aria-hidden="true" />
               <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-white">
                 {siteConfig.contact.email}
               </a>
             </li>
             <li className="flex items-center gap-2">
-              <Phone className="size-4 text-brand-300" aria-hidden="true" />
+              <Phone className="size-4 text-lagoon-300" aria-hidden="true" />
               <span>{siteConfig.contact.phone}</span>
             </li>
           </ul>

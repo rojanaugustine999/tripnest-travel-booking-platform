@@ -1,7 +1,8 @@
 # TripNest — Travel Booking Platform
 
-A full-stack travel booking platform built with Next.js, TypeScript, Tailwind CSS and Supabase.
-See [docs/ROADMAP.md](docs/ROADMAP.md) for the 11-phase development plan.
+A full-stack hotel booking platform built with Next.js, TypeScript, Tailwind CSS, shadcn/ui and Supabase.
+See [docs/ROADMAP.md](docs/ROADMAP.md) for the 11-phase development plan and
+[docs/MASTER_INSTRUCTIONS.md](docs/MASTER_INSTRUCTIONS.md) for the full requirements.
 
 ## Getting started
 
@@ -11,7 +12,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000. The internal component style guide is at http://localhost:3000/design-system.
 
 ## Scripts
 
@@ -28,12 +29,23 @@ Open http://localhost:3000.
 
 ```
 src/
-├─ app/            routes, root layout, global styles
+├─ app/            routes, root layout, global styles (design tokens)
+│  └─ design-system/  internal style guide page
 ├─ components/
-│  ├─ ui/          reusable primitives (Button, Container, Logo)
-│  └─ layout/      Navbar, Footer
+│  ├─ ui/          shadcn/ui primitives styled with TripNest tokens
+│  ├─ common/      shared pieces: Section, SectionHeading, RatingStars, EmptyState, DateRangePicker, FormField
+│  └─ layout/      Navbar, UserMenu, Footer
 ├─ config/         site config and navigation
-├─ lib/            utilities
+├─ lib/            utilities (cn, formatPrice)
 └─ types/          shared TypeScript types
-docs/              roadmap and phase notes
+docs/              master instructions and roadmap
 ```
+
+## Design system
+
+- **Colours:** navy (primary), lagoon teal (secondary), coral (main call to action), slate neutrals. Defined in
+  `src/app/globals.css`; text/background pairs meet WCAG AA contrast.
+- **Typography:** Plus Jakarta Sans (headings) and Inter (body) with a `text-display` / `text-h1`–`text-h4` /
+  `text-lead` / `text-eyebrow` scale.
+- **Components:** shadcn/ui on Radix primitives (keyboard and screen-reader accessible), Lucide icons, date-fns
+  calendar.

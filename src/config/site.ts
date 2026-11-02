@@ -2,9 +2,9 @@ import type { FooterLinkGroup, NavItem } from "@/types";
 
 export const siteConfig = {
   name: "TripNest",
-  tagline: "Your nest for unforgettable journeys",
+  tagline: "Find your perfect stay",
   description:
-    "Discover handpicked destinations and tour packages, book in minutes, and manage every trip in one place with TripNest.",
+    "Discover destinations, compare hotels and rooms, and complete a demo booking in minutes. Manage every stay from your TripNest dashboard.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   contact: {
     email: "hello@tripnest.example",
@@ -15,9 +15,17 @@ export const siteConfig = {
 export const mainNav: NavItem[] = [
   { title: "Home", href: "/" },
   { title: "Destinations", href: "/destinations" },
-  { title: "Packages", href: "/packages" },
+  { title: "Hotels", href: "/hotels" },
   { title: "About", href: "/about" },
   { title: "Contact", href: "/contact" },
+];
+
+/** Links shown in the signed-in user menu (wired to real auth in Phase 5). */
+export const userNav: NavItem[] = [
+  { title: "Dashboard", href: "/dashboard" },
+  { title: "My bookings", href: "/bookings" },
+  { title: "Saved hotels", href: "/saved-hotels" },
+  { title: "Profile", href: "/profile" },
 ];
 
 export const footerNav: FooterLinkGroup[] = [
@@ -25,7 +33,7 @@ export const footerNav: FooterLinkGroup[] = [
     title: "Explore",
     links: [
       { title: "Destinations", href: "/destinations" },
-      { title: "Tour Packages", href: "/packages" },
+      { title: "Hotels", href: "/hotels" },
     ],
   },
   {
@@ -33,14 +41,14 @@ export const footerNav: FooterLinkGroup[] = [
     links: [
       { title: "About Us", href: "/about" },
       { title: "Contact", href: "/contact" },
-      { title: "FAQ", href: "/faq" },
     ],
   },
   {
-    title: "Legal",
+    title: "Account",
     links: [
-      { title: "Terms of Service", href: "/terms" },
-      { title: "Privacy Policy", href: "/privacy" },
+      { title: "Log in", href: "/login" },
+      { title: "Create account", href: "/register" },
+      { title: "My bookings", href: "/bookings" },
     ],
   },
 ];

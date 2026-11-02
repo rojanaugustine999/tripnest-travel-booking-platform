@@ -42,7 +42,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   navigation still says "Packages" instead of "Hotels"; shadcn/ui not yet installed. These are fixed in Phase 2
   without rewriting the Phase 1 commit.
 
-## Phase 2 — UI Foundation and Design System
+## Phase 2 — UI Foundation and Design System ✅
 
 - **Objective:** A consistent, accessible component library that every later page is built from.
 - **Tasks:**

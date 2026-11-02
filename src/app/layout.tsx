@@ -3,6 +3,9 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const inter = Inter({
@@ -32,24 +35,27 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#088381",
+  themeColor: "#172645",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${jakarta.variable} h-full`}>
+    <html lang="en" className={cn("h-full", inter.variable, jakarta.variable)}>
       <body className="flex min-h-full flex-col">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:shadow-card"
-        >
-          Skip to content
-        </a>
-        <Navbar />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <TooltipProvider>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:shadow-card"
+          >
+            Skip to content
+          </a>
+          <Navbar />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <Toaster position="top-center" />
+        </TooltipProvider>
       </body>
     </html>
   );
