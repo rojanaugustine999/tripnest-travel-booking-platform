@@ -29,17 +29,30 @@ Open http://localhost:3000. The internal component style guide is at http://loca
 
 ```
 src/
-├─ app/            routes, root layout, global styles (design tokens)
-│  └─ design-system/  internal style guide page
+├─ app/
+│  ├─ (public)/      home, destinations, hotels, about, contact
+│  └─ design-system/ internal style guide page
 ├─ components/
-│  ├─ ui/          shadcn/ui primitives styled with TripNest tokens
-│  ├─ common/      shared pieces: Section, SectionHeading, RatingStars, EmptyState, DateRangePicker, FormField
-│  └─ layout/      Navbar, UserMenu, Footer
-├─ config/         site config and navigation
-├─ lib/            utilities (cn, formatPrice)
-└─ types/          shared TypeScript types
-docs/              master instructions and roadmap
+│  ├─ ui/           shadcn/ui primitives styled with TripNest tokens
+│  ├─ common/       shared pieces (Section, PageHeader, Breadcrumbs, Pagination, DateRangePicker, GuestRoomPicker…)
+│  └─ layout/       Navbar, UserMenu, Footer
+├─ features/
+│  ├─ destinations/ data, queries, cards, search
+│  ├─ hotels/       data, queries, search params, filter/sort logic, cards, filters, gallery
+│  ├─ rooms/        room data, room cards and selection
+│  ├─ saved-hotels/ save button
+│  └─ marketing/    newsletter, contact form, testimonials
+├─ config/          site config and navigation
+├─ lib/             utils (cn, formatPrice, text, images), validations (Zod)
+└─ types/           domain types mirroring the planned database
+docs/               master instructions and roadmap
 ```
+
+## Sample data
+
+Until Supabase is connected (Phase 4/6), destinations, hotels, rooms and reviews come from typed sample data in
+`src/features/*/data`. Pages only call the async functions in `features/*/queries.ts`, so switching to the
+database does not change any page. Photos are from Unsplash (free to use under the Unsplash licence).
 
 ## Design system
 

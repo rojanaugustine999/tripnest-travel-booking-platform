@@ -66,7 +66,11 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   walk-through of dialog, dropdown, date picker and mobile menu; contrast check.
 - **Result:** A complete, documented design system; no feature pages yet.
 
-## Phase 3 — Public Website and Frontend
+## Phase 3 — Public Website and Frontend ✅
+
+- **Status:** done. Pages: home, destinations (+ details), hotels (+ details with room selection), about, contact.
+  Search / filters / sort / pagination run through `features/hotels/lib` on sample data. Save hotel, newsletter,
+  contact and Reserve are clearly labelled demos until Phases 4–7.
 
 - **Objective:** The complete public experience, working against realistic sample data.
 - **Tasks:**
