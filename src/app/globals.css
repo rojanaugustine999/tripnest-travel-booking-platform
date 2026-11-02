@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/*
+ * TripNest design tokens.
+ * Brand: deep ocean teal (primary) + warm sunset coral (accent) on soft sand neutrals.
+ */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #effcfb;
+  --color-brand-100: #c8f5f1;
+  --color-brand-200: #92ebe4;
+  --color-brand-300: #54d9d1;
+  --color-brand-400: #26bfb9;
+  --color-brand-500: #0ea39f;
+  --color-brand-600: #088381;
+  --color-brand-700: #0b6868;
+  --color-brand-800: #0e5354;
+  --color-brand-900: #114546;
+  --color-brand-950: #032829;
+
+  --color-accent-50: #fff4ed;
+  --color-accent-100: #ffe6d4;
+  --color-accent-200: #ffc9a8;
+  --color-accent-300: #ffa370;
+  --color-accent-400: #ff7237;
+  --color-accent-500: #fe4c11;
+  --color-accent-600: #ef3307;
+  --color-accent-700: #c62208;
+  --color-accent-800: #9d1c0f;
+  --color-accent-900: #7e1a10;
+
+  --color-sand-50: #fafaf7;
+  --color-sand-100: #f4f3ee;
+
+  --radius-card: 1.25rem;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.12);
+  --shadow-card-hover: 0 2px 4px rgb(15 23 42 / 0.06), 0 16px 40px -12px rgb(15 23 42 / 0.2);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-sand-50 font-sans text-slate-800 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-slate-900;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
