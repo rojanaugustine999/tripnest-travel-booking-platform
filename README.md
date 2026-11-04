@@ -24,7 +24,9 @@ Open http://localhost:3000. The internal component style guide is at http://loca
 | `npm run lint`             | ESLint                                                                          |
 | `npm run typecheck`        | TypeScript type-check                                                           |
 | `npm run format`           | Format with Prettier                                                            |
+| `npm run test:logic`       | Check validators, price maths and the redirect guard with hostile input         |
 | `npm run db:check`         | Test the live Supabase project as a signed-out visitor (reads `.env.local`)     |
+| `npm run db:security`      | Probe the live database like an attacker (reads, writes, functions)             |
 | `npm run db:push`          | Apply new migrations to the linked Supabase project (`-- --dry-run` to preview) |
 | `npm run db:types`         | Regenerate `src/types/database.ts` from the linked project                      |
 | `npm run db:seed:generate` | Rebuild `supabase/seed.sql` from the sample data                                |

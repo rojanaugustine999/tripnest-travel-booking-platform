@@ -11,7 +11,8 @@ import { AdminNav } from "@/features/admin/components/admin-nav";
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <Container className="py-8 lg:py-10">
-      <div className="grid gap-8 lg:grid-cols-[230px_1fr]">
+      {/* minmax(0, 1fr) lets wide tables scroll inside their own box instead of stretching the page. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[230px_minmax(0,1fr)]">
         <aside className="lg:sticky lg:top-24 lg:h-fit">
           <p className="mb-3 flex items-center gap-2 px-1 text-xs font-semibold tracking-wider text-lagoon-700 uppercase">
             <ShieldCheck className="size-4" aria-hidden="true" />

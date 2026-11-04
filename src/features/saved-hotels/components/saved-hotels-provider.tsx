@@ -1,57 +1,55 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
+import { getSavedHotelIds } from "../actions";
 
 type SavedHotelsState = {
-  /** `null` until the browser has checked; then true/false. */
+  /** `null` until the navbar has reported who is signed in; then true/false. */
   signedIn: boolean | null;
   savedIds: ReadonlySet<string>;
   setSaved: (hotelId: string, saved: boolean) => void;
+  /** Called by <SavedHotelsSync> (rendered by the account menu) whenever the signed-in state is known. */
+  syncAuth: (signedIn: boolean) => void;
 };
 
 const SavedHotelsContext = createContext<SavedHotelsState>({
   signedIn: null,
   savedIds: new Set(),
   setSaved: () => {},
+  syncAuth: () => {},
 });
 
 export const useSavedHotels = () => useContext(SavedHotelsContext);
 
 /**
- * Loads the signed-in user's saved hotel ids once in the browser (Row Level Security returns only their own rows),
- * so hotel pages stay cacheable and shared between visitors while the hearts still show the right state.
+ * Holds the signed-in user's saved hotel ids so every heart shows the right state while public pages stay
+ * cached and shared. The ids come from a Server Action (no Supabase code is shipped to visitors who are
+ * signed out), and the account menu tells this provider when someone signs in or out.
  */
 export function SavedHotelsProvider({ children }: { children: ReactNode }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [savedIds, setSavedIds] = useState<ReadonlySet<string>>(new Set());
+  const lastSync = useRef<boolean | null>(null);
 
-  useEffect(() => {
-    const supabase = createClient();
-
-    async function load() {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        setSignedIn(false);
-        setSavedIds(new Set());
-        return;
-      }
-      const { data: rows } = await supabase.from("saved_hotels").select("hotel_id");
-      setSavedIds(new Set((rows ?? []).map((r) => r.hotel_id)));
-      setSignedIn(true);
+  const syncAuth = useCallback((next: boolean) => {
+    // The account menu renders twice (desktop and mobile) and again after every auth change: only act on a real change.
+    if (lastSync.current === next) return;
+    lastSync.current = next;
+    setSignedIn(next);
+    if (!next) {
+      setSavedIds(new Set());
+      return;
     }
-
-    void load();
-    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN" || event === "SIGNED_OUT") void load();
+    void getSavedHotelIds().then((ids) => {
+      if (lastSync.current === true) setSavedIds(new Set(ids));
     });
-    return () => sub.subscription.unsubscribe();
   }, []);
 
   const value = useMemo<SavedHotelsState>(
     () => ({
       signedIn,
       savedIds,
+      syncAuth,
       setSaved: (hotelId, saved) =>
         setSavedIds((current) => {
           const next = new Set(current);
@@ -60,7 +58,7 @@ export function SavedHotelsProvider({ children }: { children: ReactNode }) {
           return next;
         }),
     }),
-    [signedIn, savedIds],
+    [signedIn, savedIds, syncAuth],
   );
 
   return <SavedHotelsContext.Provider value={value}>{children}</SavedHotelsContext.Provider>;

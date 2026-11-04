@@ -220,7 +220,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   brand-new hotel through the form (the save function is shared with edit and database-tested). Images are managed as
   links (no Supabase Storage uploads). Hotels are archived, not hard-deleted, so booking history stays intact.
 
-## Phase 10 — Security, Testing and Optimization
+## Phase 10 — Security, Testing and Optimization ✅
 
 - **Objective:** Prove the application is secure, correct and fast.
 - **Tasks:** RLS policy review and tests; authentication and authorization tests; booking abuse tests; environment
@@ -231,6 +231,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Depends on:** Phases 1–9.
 - **Verify:** checklist fully passed and documented; Lighthouse performance and accessibility reviewed.
 - **Result:** Production-ready application.
+- **Status:** Done. See `docs/TESTING.md` for the full checklist, results, bugs fixed and known limitations.
 
 ## Phase 11 — GitHub and Vercel Deployment
 

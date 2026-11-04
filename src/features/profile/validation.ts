@@ -7,7 +7,7 @@ export const profileSchema = z.object({
     .string()
     .trim()
     .max(20, "Phone number is too long.")
-    .regex(/^(\+?[0-9][0-9 ()-]{5,18}[0-9])?$/, "Enter a valid phone number, or leave it empty."),
+    .regex(/^(\+?\(?[0-9][0-9 ()-]{5,18}[0-9])?$/, "Enter a valid phone number, or leave it empty."),
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;

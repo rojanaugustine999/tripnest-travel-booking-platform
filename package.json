@@ -9,8 +9,10 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
+    "test:logic": "tsx scripts/check-logic.mts",
     "db:seed:generate": "tsx scripts/generate-seed.ts",
     "db:check": "tsx --env-file=.env.local scripts/check-supabase.mts",
+    "db:security": "tsx --env-file=.env.local scripts/check-security.mts",
     "db:types": "supabase gen types --remote --lang typescript --schema public > src/types/database.ts",
     "db:push": "supabase db push --remote"
   },

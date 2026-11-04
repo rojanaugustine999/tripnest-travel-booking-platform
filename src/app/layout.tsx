@@ -47,34 +47,35 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" data-scroll-behavior="smooth" className={cn("h-full", inter.variable, jakarta.variable)}>
       <body className="flex min-h-full flex-col">
         <TooltipProvider>
-          <a
-            href="#main"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:shadow-card"
-          >
-            Skip to content
-          </a>
-          {/* The navbar reads the current URL, which is unknown while prerendering dynamic routes such as /confirmation/[reference]. */}
-          <Suspense fallback={<div className="h-[65px] border-b border-border/70 bg-white" />}>
-            <Navbar
-              account={
-                <Suspense fallback={<Skeleton className="h-9 w-40 rounded-full" />}>
-                  <AccountMenu variant="desktop" />
-                </Suspense>
-              }
-              mobileAccount={
-                <Suspense fallback={<Skeleton className="h-11 w-full rounded-full" />}>
-                  <AccountMenu variant="mobile" />
-                </Suspense>
-              }
-            />
-          </Suspense>
+          {/* The provider wraps the navbar too: the account menu tells it who is signed in. */}
           <SavedHotelsProvider>
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:shadow-card"
+            >
+              Skip to content
+            </a>
+            {/* The navbar reads the current URL, which is unknown while prerendering dynamic routes such as /confirmation/[reference]. */}
+            <Suspense fallback={<div className="h-[65px] border-b border-border/70 bg-white" />}>
+              <Navbar
+                account={
+                  <Suspense fallback={<Skeleton className="h-9 w-40 rounded-full" />}>
+                    <AccountMenu variant="desktop" />
+                  </Suspense>
+                }
+                mobileAccount={
+                  <Suspense fallback={<Skeleton className="h-11 w-full rounded-full" />}>
+                    <AccountMenu variant="mobile" />
+                  </Suspense>
+                }
+              />
+            </Suspense>
             <main id="main" className="flex-1">
               {children}
             </main>
+            <Footer />
+            <Toaster position="top-center" />
           </SavedHotelsProvider>
-          <Footer />
-          <Toaster position="top-center" />
         </TooltipProvider>
       </body>
     </html>

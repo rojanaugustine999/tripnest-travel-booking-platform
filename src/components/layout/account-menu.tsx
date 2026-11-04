@@ -1,4 +1,5 @@
 import { getCurrentProfile } from "@/lib/auth/session";
+import { SavedHotelsSync } from "@/features/saved-hotels/components/saved-hotels-sync";
 import { MobileAccountMenu, UserMenu, type MenuUser } from "./user-menu";
 
 /**
@@ -17,5 +18,10 @@ export async function AccountMenu({ variant }: { variant: "desktop" | "mobile" }
       }
     : null;
 
-  return variant === "desktop" ? <UserMenu user={user} /> : <MobileAccountMenu user={user} />;
+  return (
+    <>
+      <SavedHotelsSync signedIn={Boolean(profile)} />
+      {variant === "desktop" ? <UserMenu user={user} /> : <MobileAccountMenu user={user} />}
+    </>
+  );
 }

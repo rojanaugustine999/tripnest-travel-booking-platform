@@ -32,3 +32,12 @@ export async function setHotelSaved(hotelId: string, saved: boolean): Promise<Sa
   }
   return { ok: true };
 }
+
+/** The signed-in user's saved hotel ids (empty when signed out). Loaded once per visit to colour the hearts. */
+export async function getSavedHotelIds(): Promise<string[]> {
+  const userId = await getAuthUserId();
+  if (!userId) return [];
+  const supabase = await createClient();
+  const { data } = await supabase.from("saved_hotels").select("hotel_id").eq("user_id", userId);
+  return (data ?? []).map((row) => row.hotel_id);
+}
