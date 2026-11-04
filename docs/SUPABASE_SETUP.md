@@ -159,6 +159,14 @@ Supabase's Security Advisor lists two "SECURITY DEFINER function executable" war
 - `cancel_booking` lets an owner cancel only their own future booking (users cannot update bookings directly).
 - `get_room_availability` returns only free-room counts (no booking details) so visitors can see availability.
 
+## Admin functions (Phase 9)
+
+Run `supabase/migrations/20261104101500_admin_functions.sql` once on the **tripnest** project: Dashboard →
+**SQL Editor → New query**, paste the whole file, **Run**. (Check the project name at the top-left first.) It adds
+`admin_dashboard_stats`, `admin_save_hotel`, `admin_set_booking_status` and `admin_set_user_role`. Each one checks
+`private.is_admin()` itself, so a non-admin is refused by the database. Running it in the SQL Editor does not add a row
+to the CLI's migration history; that is fine for this project.
+
 ## Making yourself an admin (after you register)
 
 Admin rights can't be granted from the website. In the **SQL Editor**, run:

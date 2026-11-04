@@ -640,6 +640,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_dashboard_stats: {
+        Args: { [_ in never]: never }
+        Returns: Json
+      }
+      admin_save_hotel: {
+        Args: { p_hotel: Json }
+        Returns: string
+      }
+      admin_set_booking_status: {
+        Args: {
+          p_reference: string
+          p_status: Database["public"]["Enums"]["booking_status"]
+        }
+        Returns: Json
+      }
+      admin_set_user_role: {
+        Args: {
+          p_role: Database["public"]["Enums"]["user_role"]
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       cancel_booking: {
         Args: { p_reference: string }
         Returns: Json
