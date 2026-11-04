@@ -9,15 +9,15 @@ It does not touch your existing `amazon-product-listing` project.
 
 ## Current status (4 November 2026)
 
-| Item               | Value                                                                                                       |
-| ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects**                                  |
-| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                                                     |
-| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                                                  |
-| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`, `search_hotels`, `booking_functions` |
-| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                                                    |
-| `npm run db:check` | All 9 checks pass                                                                                           |
-| Security Advisor   | No issues                                                                                                   |
+| Item               | Value                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects**                                                    |
+| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                                                                       |
+| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                                                                    |
+| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`, `search_hotels`, `booking_functions`, `cancel_booking` |
+| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                                                                      |
+| `npm run db:check` | All 9 checks pass                                                                                                             |
+| Security Advisor   | No issues                                                                                                                     |
 
 Steps 1–4 below are already done (with the 4 migrations; Option A applies them all); they stay here so the setup can be repeated (for example on a new
 project). Step 5 is needed before Phase 5.
@@ -156,6 +156,7 @@ Supabase's Security Advisor lists two "SECURITY DEFINER function executable" war
 
 - `create_booking` is the only way to create a booking (users have no INSERT permission on `bookings`). It requires a
   signed-in user, only acts for `auth.uid()`, and is not executable by `anon`.
+- `cancel_booking` lets an owner cancel only their own future booking (users cannot update bookings directly).
 - `get_room_availability` returns only free-room counts (no booking details) so visitors can see availability.
 
 ## Making yourself an admin (after you register)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,7 @@ export function SaveHotelButton({ hotelId, hotelName, className, size = "icon-sm
   const { signedIn, savedIds, setSaved } = useSavedHotels();
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const pathname = usePathname();
   const saved = savedIds.has(hotelId);
 
   function toggle() {
@@ -37,6 +38,7 @@ export function SaveHotelButton({ hotelId, hotelName, className, size = "icon-sm
       const result = await setHotelSaved(hotelId, next);
       if (result.ok) {
         toast(next ? `${hotelName} saved` : `${hotelName} removed from saved hotels`);
+        if (pathname === "/saved-hotels") router.refresh(); // update the saved list itself
       } else {
         setSaved(hotelId, !next); // undo
         if (result.signedOut) router.push(`/login?next=${encodeURIComponent(window.location.pathname)}`);

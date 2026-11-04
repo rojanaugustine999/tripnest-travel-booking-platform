@@ -66,3 +66,29 @@ export async function createBooking(input: CreateBookingInput): Promise<BookingR
   if (!reference) return { ok: false, message: "We could not complete your booking. Please try again." };
   return { ok: true, reference };
 }
+
+export type CancelResult = { ok: true } | { ok: false; message: string };
+
+const CANCEL_ERRORS: Record<string, string> = {
+  not_signed_in: "Please log in to manage your bookings.",
+  booking_not_found: "We could not find that booking.",
+  not_cancellable: "This booking can no longer be cancelled (it has started or is already finished).",
+};
+
+/** Cancels the signed-in user's own future booking. The database function enforces who and when. */
+export async function cancelBooking(reference: string): Promise<CancelResult> {
+  if (typeof reference !== "string" || !/^TN-[A-Za-z0-9]{8}$/.test(reference)) {
+    return { ok: false, message: CANCEL_ERRORS.booking_not_found };
+  }
+  if (!(await getAuthUserId())) return { ok: false, message: CANCEL_ERRORS.not_signed_in };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("cancel_booking", { p_reference: reference });
+  if (error) {
+    return {
+      ok: false,
+      message: CANCEL_ERRORS[error.message] ?? "We could not cancel this booking. Please try again.",
+    };
+  }
+  return { ok: true };
+}

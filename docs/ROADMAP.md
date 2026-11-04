@@ -181,7 +181,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   dates yet; the hotel page and booking page show live availability for chosen dates. Cancelling a booking comes with
   the Phase 8 dashboard.
 
-## Phase 8 — User Dashboard
+## Phase 8 — User Dashboard ✅
 
 - **Objective:** Self-service area for signed-in users.
 - **Tasks:** overview (upcoming trip, counts), My bookings (reference, hotel, image, room type, dates, nights,
@@ -193,6 +193,10 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Verify:** a user only ever sees their own data (tested with two accounts); profile validation; image upload
   limits; empty states.
 - **Result:** Complete user dashboard.
+- **Status:** Done, except the profile photo: it was left out on purpose (initials are shown instead) because Supabase
+  Storage needs bucket access rules and upload limits; add it later if wanted. Cancelling goes through the
+  `cancel_booking` function. "My" queries filter by the signed-in user's id explicitly (admins can read all bookings).
+  The two-account check was covered by database tests, not by two real logins.
 
 ## Phase 9 — Admin Dashboard
 

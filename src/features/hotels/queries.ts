@@ -205,6 +205,12 @@ export async function getSimilarHotels(hotel: { id: string; destination: { slug:
   return [...same, ...others].slice(0, limit);
 }
 
+/** Cards for specific hotels (e.g. a user's saved list), in the order of `ids`. Unpublished hotels are skipped. */
+export async function getHotelsByIds(ids: string[]): Promise<HotelSummary[]> {
+  const all = new Map((await getAllSummaries()).map((h) => [h.id, h]));
+  return ids.flatMap((id) => all.get(id) ?? []);
+}
+
 export async function getHotelSlugs(): Promise<string[]> {
   return (await getAllSummaries()).map((h) => h.slug);
 }

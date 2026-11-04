@@ -640,6 +640,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_booking: {
+        Args: { p_reference: string }
+        Returns: Json
+      }
       create_booking: {
         Args: {
           p_check_in: string
