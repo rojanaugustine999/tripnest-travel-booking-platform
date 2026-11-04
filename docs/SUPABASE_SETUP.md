@@ -9,18 +9,19 @@ It does not touch your existing `amazon-product-listing` project.
 
 ## Current status (4 November 2026)
 
-| Item               | Value                                                                                                                         |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects**                                                    |
-| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                                                                       |
-| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                                                                    |
-| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`, `search_hotels`, `booking_functions`, `cancel_booking` |
-| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                                                                      |
-| `npm run db:check` | All 9 checks pass                                                                                                             |
-| Security Advisor   | No issues                                                                                                                     |
+| Item               | Value                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects**                                                                       |
+| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                                                                                          |
+| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                                                                                       |
+| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`, `search_hotels`, `booking_functions`, `cancel_booking`, `admin_functions` |
+| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                                                                                         |
+| `npm run db:check` | All 9 checks pass                                                                                                                                |
+| Security Advisor   | Only intentional warnings (see below)                                                                                                            |
 
-Steps 1–4 below are already done (with the 4 migrations; Option A applies them all); they stay here so the setup can be repeated (for example on a new
-project). Step 5 is needed before Phase 5.
+Steps 1–5 below are already done for the live `tripnest` project (7 migrations: `initial_schema`, `functions_and_triggers`,
+`rls_policies_and_grants`, `search_hotels`, `booking_functions`, `cancel_booking`, `admin_functions`). They stay here so the
+setup can be repeated on a new project, for example a copy for your own deployment.
 
 ---
 
@@ -79,7 +80,7 @@ Connects this folder to the `tripnest` project. When asked, type the **database 
 npm run db:push -- --dry-run
 ```
 
-Shows the 3 migrations that would run, without changing anything.
+Shows the 7 migrations that would run, without changing anything.
 
 ```bash
 npm run db:push -- --include-seed
@@ -94,7 +95,11 @@ In the Dashboard open **SQL Editor → New query**, then paste and **Run** each 
 1. `supabase/migrations/20261104041853_initial_schema.sql`
 2. `supabase/migrations/20261104041914_functions_and_triggers.sql`
 3. `supabase/migrations/20261104041946_rls_policies_and_grants.sql`
-4. `supabase/seed.sql`
+4. `supabase/migrations/20261104052411_search_hotels.sql`
+5. `supabase/migrations/20261104092126_booking_functions.sql`
+6. `supabase/migrations/20261104093452_cancel_booking.sql`
+7. `supabase/migrations/20261104101500_admin_functions.sql`
+8. `supabase/seed.sql` (sample data, run last)
 
 Each should end with "Success. No rows returned".
 
