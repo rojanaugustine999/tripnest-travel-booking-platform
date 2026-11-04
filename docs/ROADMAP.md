@@ -96,7 +96,12 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   responsive at 375 / 768 / 1280 px; no horizontal scroll; images have alt text.
 - **Result:** A fully navigable, realistic public website (sample data, clearly labelled).
 
-## Phase 4 — Supabase Setup and Database
+## Phase 4 — Supabase Setup and Database ✅
+
+- **Status:** done. Project `tripnest` (Mumbai, Free plan) created; 3 migrations (13 tables, functions/triggers,
+  RLS + grants) applied; sample data loaded and checksum-verified; types generated; `npm run db:check` and the
+  Security Advisor pass. Optional policy-merge optimisation (Performance Advisor `multiple_permissive_policies`)
+  was skipped by choice — revisit in Phase 10.
 
 - **Objective:** A reproducible, secure PostgreSQL database for the whole booking workflow.
 - **Tasks:**
