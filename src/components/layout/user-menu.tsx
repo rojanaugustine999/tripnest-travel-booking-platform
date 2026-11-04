@@ -13,8 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "@/features/auth/actions";
 
-/** Minimal shape the menu needs; Phase 5 maps the Supabase session + profile onto it. */
+/** Minimal shape the menu needs; AccountMenu maps the signed-in profile onto it. */
 export type MenuUser = {
   name: string;
   email: string;
@@ -82,12 +83,63 @@ export function UserMenu({ user }: { user: MenuUser | null }) {
           </>
         )}
         <DropdownMenuSeparator />
-        {/* Logout action is connected to Supabase Auth in Phase 5. */}
-        <DropdownMenuItem variant="destructive">
-          <LogOut />
-          Log out
-        </DropdownMenuItem>
+        {/* A real <form> posting to the signOut Server Action (works without JavaScript too). */}
+        <form action={signOut}>
+          <DropdownMenuItem variant="destructive" asChild>
+            <button type="submit" className="w-full">
+              <LogOut />
+              Log out
+            </button>
+          </DropdownMenuItem>
+        </form>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+/** Account section of the mobile menu sheet. */
+export function MobileAccountMenu({ user }: { user: MenuUser | null }) {
+  if (!user) {
+    return (
+      <div className="grid grid-cols-2 gap-3">
+        <ButtonLink href="/login" variant="outline">
+          Log in
+        </ButtonLink>
+        <ButtonLink href="/register">Sign up</ButtonLink>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-3 px-1">
+        <Avatar>
+          {user.avatarUrl && <AvatarImage src={user.avatarUrl} alt="" />}
+          <AvatarFallback className="bg-navy-100 font-semibold text-navy-900">{initials(user.name)}</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0">
+          <p className="truncate font-semibold text-slate-900">{user.name}</p>
+          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        </div>
+      </div>
+      <ul className="grid grid-cols-2 gap-2">
+        {[...userNav, ...(user.isAdmin ? [{ title: "Admin", href: "/admin" }] : [])].map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="block rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-navy-50"
+            >
+              {item.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <form action={signOut}>
+        <Button type="submit" variant="outline" className="w-full">
+          <LogOut />
+          Log out
+        </Button>
+      </form>
+    </div>
   );
 }

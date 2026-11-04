@@ -2,23 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, type MouseEvent, type ReactNode } from "react";
 import { Menu } from "lucide-react";
 import { mainNav } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { UserMenu } from "@/components/layout/user-menu";
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 
-export function Navbar() {
+type NavbarProps = {
+  /** Account menu for wide screens, rendered on the server (see AccountMenu). */
+  account: ReactNode;
+  /** Account section for the mobile menu sheet. */
+  mobileAccount: ReactNode;
+};
+
+export function Navbar({ account, mobileAccount }: NavbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  // Close the mobile sheet when any link or button inside the account section is used.
+  const closeOnAction = (event: MouseEvent) => {
+    if ((event.target as HTMLElement).closest("a, button")) setOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-white/90 backdrop-blur-md">
@@ -46,10 +57,7 @@ export function Navbar() {
           </ul>
         </nav>
 
-        <div className="hidden lg:block">
-          {/* Signed-out state until Supabase Auth is connected in Phase 5. */}
-          <UserMenu user={null} />
-        </div>
+        <div className="hidden lg:block">{account}</div>
 
         {/* Mobile: Radix Sheet gives focus trapping, Escape to close and screen-reader labelling. */}
         <Sheet open={open} onOpenChange={setOpen}>
@@ -83,13 +91,8 @@ export function Navbar() {
                 ))}
               </ul>
             </nav>
-            <div className="grid grid-cols-2 gap-3 border-t border-border p-4">
-              <ButtonLink href="/login" variant="outline" onClick={() => setOpen(false)}>
-                Log in
-              </ButtonLink>
-              <ButtonLink href="/register" onClick={() => setOpen(false)}>
-                Sign up
-              </ButtonLink>
+            <div className="border-t border-border p-4" onClickCapture={closeOnAction}>
+              {mobileAccount}
             </div>
           </SheetContent>
         </Sheet>

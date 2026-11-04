@@ -118,7 +118,39 @@ Then in the Dashboard, **Table Editor** should list 13 tables, each marked with 
 
 (The Vercel URL is added in Phase 11.)
 
-## Making yourself an admin (later, after you register in Phase 5)
+### How auth emails work (important for testing)
+
+- Sign-up confirmation and password-reset emails use Supabase's default templates (Free projects created after
+  3 June 2026 can't edit templates on the built-in email service).
+- **Open each link in the same browser where you started** (sign-up or "Forgot password"). The link carries a
+  one-time code that only works with a security cookie stored in that browser, and only once, within ~5 minutes.
+- **Built-in email service limits:** at most **2 emails per hour**, and only to your organization's team members.
+
+## Step 6 — Custom SMTP (optional: removes the 2-emails-per-hour limit)
+
+With your own email provider Supabase allows 30 emails/hour by default (adjustable under
+**Authentication → Rate Limits**) and can send to any address.
+
+**Gmail (free, good for development):**
+
+1. Turn on 2-Step Verification for your Google account, then create an **app password** at
+   <https://myaccount.google.com/apppasswords> (name it "TripNest Supabase"). Keep it secret.
+2. Dashboard → **tripnest** → **Authentication → Emails → SMTP Settings** → enable **Custom SMTP**:
+
+   | Field        | Value                        |
+   | ------------ | ---------------------------- |
+   | Sender email | your Gmail address           |
+   | Sender name  | TripNest                     |
+   | Host         | `smtp.gmail.com`             |
+   | Port         | `465`                        |
+   | Username     | your Gmail address           |
+   | Password     | the app password from step 1 |
+
+3. Optional: **Authentication → Rate Limits** → raise _Rate limit for sending emails_ (e.g. 30–60/hour).
+
+For the live site (Phase 11) a provider with your own domain (e.g. Resend) is more professional.
+
+## Making yourself an admin (after you register)
 
 Admin rights can't be granted from the website. In the **SQL Editor**, run:
 

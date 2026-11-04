@@ -126,14 +126,20 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   admin (including a user attempting to read another user's booking or set their own role).
 - **Result:** Live database with secure policies and sample data.
 
-## Phase 5 — Authentication and Authorization
+## Phase 5 — Authentication and Authorization ✅
+
+- **Status:** done. Verified live: sign-up, email confirmation, log in, log out, guests
+  redirected from account pages, non-admin gets 404 on `/admin`. Password-reset request and email link verified
+  up to the code exchange (the full reset was blocked by the 2-emails/hour limit; the exchange logic was verified
+  in a simulation). Still to check manually: the wrong-password message, one complete reset in a single browser, and `/admin` as an admin
+  after running the SQL in SUPABASE_SETUP. Non-admins get a 404 (`forbidden()` is still experimental).
 
 - **Objective:** Secure accounts and role-based access.
 - **Tasks:** registration, login, logout, password reset (request + update), email confirmation callback, profile
   creation, auth state in Navbar (user menu), session refresh via `proxy.ts`, protected `(user)` routes and `admin`
   route, server-side role checks (`requireUser`, `requireAdmin`), Zod-validated forms with clear error messages.
 - **Tech:** Supabase Auth, `@supabase/ssr`, Server Actions, React Hook Form, Zod.
-- **Files:** `src/app/(auth)/*`, `src/app/auth/callback`, `src/proxy.ts`, `src/features/auth/*`,
+- **Files:** `src/app/(auth)/*`, `src/app/auth/confirm`, `src/proxy.ts`, `src/lib/auth/session.ts`, `src/features/auth/*`,
   `src/lib/validations/auth.ts`.
 - **Depends on:** Phase 4 (`profiles`, clients).
 - **Verify:** each flow end to end; wrong password / duplicate email errors; guests redirected from protected

@@ -66,6 +66,17 @@ the security model are in [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md).
 - Environment: copy `.env.example` to `.env.local` and add the project URL and **publishable** key. The secret key
   is server-only and never committed.
 
+## Authentication
+
+Supabase Auth with email + password (`@supabase/ssr`, Server Actions, Zod validation):
+
+- `/register`, `/login`, `/forgot-password`, `/reset-password`; email links land on `/auth/confirm`.
+- `src/proxy.ts` refreshes the session on every request and redirects guests away from account pages.
+- `requireUser()` / `requireAdmin()` in `src/lib/auth/session.ts` protect pages on the server using the
+  verified `getClaims()` check and `profiles.role` from the database.
+- User area: `/dashboard`, `/bookings`, `/saved-hotels`, `/profile`. Admin area: `/admin` (404 for non-admins).
+- Make an account admin in the Supabase SQL Editor — see [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md).
+
 ## Sample data
 
 The public pages still read the typed sample data in `src/features/*/data` (Phase 6 switches them to Supabase).

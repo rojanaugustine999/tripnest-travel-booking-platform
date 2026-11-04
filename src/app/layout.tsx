@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { siteConfig } from "@/config/site";
+import { Suspense } from "react";
+import { AccountMenu } from "@/components/layout/account-menu";
 import { Navbar } from "@/components/layout/navbar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,7 +43,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn("h-full", inter.variable, jakarta.variable)}>
+    <html lang="en" data-scroll-behavior="smooth" className={cn("h-full", inter.variable, jakarta.variable)}>
       <body className="flex min-h-full flex-col">
         <TooltipProvider>
           <a
@@ -49,7 +52,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           >
             Skip to content
           </a>
-          <Navbar />
+          <Navbar
+            account={
+              <Suspense fallback={<Skeleton className="h-9 w-40 rounded-full" />}>
+                <AccountMenu variant="desktop" />
+              </Suspense>
+            }
+            mobileAccount={
+              <Suspense fallback={<Skeleton className="h-11 w-full rounded-full" />}>
+                <AccountMenu variant="mobile" />
+              </Suspense>
+            }
+          />
           <main id="main" className="flex-1">
             {children}
           </main>
