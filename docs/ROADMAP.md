@@ -198,7 +198,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   `cancel_booking` function. "My" queries filter by the signed-in user's id explicitly (admins can read all bookings).
   The two-account check was covered by database tests, not by two real logins.
 
-## Phase 9 — Admin Dashboard (built; live admin checks pending)
+## Phase 9 — Admin Dashboard ✅
 
 - **Objective:** Protected control panel for administrators.
 - **Tasks:** admin layout and sidebar; overview (total hotels, rooms, bookings, users, **demo** revenue, booking
@@ -212,11 +212,13 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Verify:** every CRUD action round-trips; non-admins rejected at server and database level; demo figures
   labelled.
 - **Result:** Fully working admin dashboard.
-- **Status:** Built and covered by database tests (admin allowed; normal users and `anon` rejected), the build, and
-  browser checks that non-admins get a 404 and guests are sent to log in. **Not yet verified live as an admin:** the
-  migration `20261104101500_admin_functions.sql` must be run in the Supabase SQL Editor and the account promoted
-  (see `docs/SUPABASE_SETUP.md`). Images are managed as links (no Supabase Storage uploads). Hotels are archived, not
-  hard-deleted, so booking history stays intact.
+- **Status:** Done and verified live as an admin: overview and charts, hotel edit/save (public site refreshes at once),
+  publish/archive, room add/edit/hide/delete, booking filters and status changes, validation and error messages.
+  Non-admins get a 404, guests are sent to log in, and every admin function is also covered by database tests.
+  The migration `20261104101500_admin_functions.sql` is run in the Supabase SQL Editor (see `docs/SUPABASE_SETUP.md`).
+  Not live-tested: promoting/demoting another user (only one account exists; covered by database tests) and creating a
+  brand-new hotel through the form (the save function is shared with edit and database-tested). Images are managed as
+  links (no Supabase Storage uploads). Hotels are archived, not hard-deleted, so booking history stays intact.
 
 ## Phase 10 — Security, Testing and Optimization
 
