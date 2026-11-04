@@ -77,6 +77,13 @@ Supabase Auth with email + password (`@supabase/ssr`, Server Actions, Zod valida
 - User area: `/dashboard`, `/bookings`, `/saved-hotels`, `/profile`. Admin area: `/admin` (404 for non-admins).
 - Make an account admin in the Supabase SQL Editor — see [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md).
 
+## Demo booking
+
+Signed-in users can book a room: guest details, review, confirm, then a confirmation page with a reference. **No payment
+is taken and no real hotel is contacted.** The browser only sends the stay and guest details; the `create_booking`
+database function validates them, checks availability under a lock, works out the price (12% demo GST) and saves it
+with the booking.
+
 ## Sample data
 
 The public pages read live data from Supabase (hotel search runs in the `search_hotels` SQL function; catalogue reads are

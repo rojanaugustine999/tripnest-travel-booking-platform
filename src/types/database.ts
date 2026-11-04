@@ -640,6 +640,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_booking: {
+        Args: {
+          p_check_in: string
+          p_check_out: string
+          p_guest_count: number
+          p_guests: Json
+          p_idempotency_key: string
+          p_room_count: number
+          p_room_id: string
+          p_special_requests: string
+        }
+        Returns: Json
+      }
+      get_room_availability: {
+        Args: { p_check_in: string; p_check_out: string; p_hotel_id: string }
+        Returns: {
+          room_id: string
+          units_free: number
+        }[]
+      }
       search_hotels: {
         Args: {
           p_amenities?: string[]

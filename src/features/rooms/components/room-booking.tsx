@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { differenceInCalendarDays, isValid, parseISO } from "date-fns";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { differenceInCalendarDays, format, isValid, parseISO } from "date-fns";
 import type { DateRange } from "react-day-picker";
-import { toast } from "sonner";
 import { CalendarCheck, Info } from "lucide-react";
 import type { HotelOffer, Room } from "@/types/domain";
 import { formatPrice } from "@/lib/utils";
@@ -15,10 +14,13 @@ import { DateRangePicker } from "@/components/common/date-range-picker";
 import { GuestRoomPicker, type GuestRoomValue } from "@/components/common/guest-room-picker";
 import { applyOffer } from "@/features/hotels/lib/pricing";
 import { parseHotelSearchParams } from "@/features/hotels/lib/search-params";
+import { createClient } from "@/lib/supabase/client";
+import { MAX_NIGHTS } from "@/features/bookings/validation";
 import { RoomCard } from "./room-card";
 
 type RoomBookingProps = {
-  hotelName: string;
+  hotelId: string;
+  hotelSlug: string;
   rooms: Room[];
   offer: HotelOffer | null;
 };
@@ -31,9 +33,10 @@ function toDate(value?: string) {
 /**
  * Room comparison and selection with a live price summary.
  * Dates and party size start from the URL (carried over from the search page).
- * The figures here are an estimate; the booking flow (Phase 7) recalculates prices on the server.
+ * The figures here are an estimate; the booking flow recalculates prices on the server.
  */
-export function RoomBooking({ hotelName, rooms, offer }: RoomBookingProps) {
+export function RoomBooking({ hotelId, hotelSlug, rooms: sampleRooms, offer }: RoomBookingProps) {
+  const router = useRouter();
   const initial = parseHotelSearchParams(useSearchParams());
   const [dates, setDates] = useState<DateRange | undefined>(() => {
     const from = toDate(initial.checkIn);
@@ -42,6 +45,35 @@ export function RoomBooking({ hotelName, rooms, offer }: RoomBookingProps) {
   const [party, setParty] = useState<GuestRoomValue>({ guests: initial.guests, rooms: initial.rooms });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const nights = dates?.from && dates?.to ? differenceInCalendarDays(dates.to, dates.from) : 0;
+  const checkIn = dates?.from && nights > 0 ? format(dates.from, "yyyy-MM-dd") : null;
+  const checkOut = dates?.to && nights > 0 ? format(dates.to, "yyyy-MM-dd") : null;
+
+  // Once dates are chosen, ask the database how many of each room are free on those exact nights.
+  const [live, setLive] = useState<{ key: string; free: Record<string, number> } | null>(null);
+  const liveKey = checkIn && checkOut ? `${checkIn}|${checkOut}` : null;
+  useEffect(() => {
+    if (!checkIn || !checkOut || nights > MAX_NIGHTS) return;
+    let cancelled = false;
+    void createClient()
+      .rpc("get_room_availability", { p_hotel_id: hotelId, p_check_in: checkIn, p_check_out: checkOut })
+      .then(({ data }) => {
+        if (cancelled || !data) return;
+        setLive({
+          key: `${checkIn}|${checkOut}`,
+          free: Object.fromEntries(data.map((r) => [r.room_id, r.units_free])),
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [hotelId, checkIn, checkOut, nights]);
+  const rooms = sampleRooms.map((room) =>
+    live && live.key === liveKey
+      ? { ...room, availableUnits: Math.min(room.totalUnits, live.free[room.id] ?? 0) }
+      : room,
+  );
 
   const guestsPerRoom = Math.ceil(party.guests / party.rooms);
 
@@ -55,7 +87,6 @@ export function RoomBooking({ hotelName, rooms, offer }: RoomBookingProps) {
   const selected = rooms.find((r) => r.id === selectedId) ?? null;
   // If the party changes so the selected room no longer fits, treat it as unselected.
   const selectedRoom = selected && !reasonUnavailable(selected) ? selected : null;
-  const nights = dates?.from && dates?.to ? differenceInCalendarDays(dates.to, dates.from) : 0;
   const nightly = selectedRoom ? applyOffer(selectedRoom.pricePerNight, offer) : 0;
   const subtotal = nightly * nights * party.rooms;
   const savings = selectedRoom && offer ? (selectedRoom.pricePerNight - nightly) * nights * party.rooms : 0;
@@ -63,10 +94,17 @@ export function RoomBooking({ hotelName, rooms, offer }: RoomBookingProps) {
   function reserve() {
     if (!selectedRoom) return setError("Select a room to continue.");
     if (!nights) return setError("Choose your check-in and check-out dates.");
+    if (nights > MAX_NIGHTS) return setError(`You can book up to ${MAX_NIGHTS} nights at a time.`);
     setError(null);
-    toast.info("Demo: no booking was made", {
-      description: `The step-by-step booking for ${selectedRoom.name} at ${hotelName} will be available soon.`,
+    const query = new URLSearchParams({
+      hotel: hotelSlug,
+      room: selectedRoom.id,
+      checkIn: format(dates!.from!, "yyyy-MM-dd"),
+      checkOut: format(dates!.to!, "yyyy-MM-dd"),
+      guests: String(party.guests),
+      rooms: String(party.rooms),
     });
+    router.push(`/booking?${query}`);
   }
 
   return (

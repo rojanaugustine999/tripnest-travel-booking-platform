@@ -53,18 +53,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           >
             Skip to content
           </a>
-          <Navbar
-            account={
-              <Suspense fallback={<Skeleton className="h-9 w-40 rounded-full" />}>
-                <AccountMenu variant="desktop" />
-              </Suspense>
-            }
-            mobileAccount={
-              <Suspense fallback={<Skeleton className="h-11 w-full rounded-full" />}>
-                <AccountMenu variant="mobile" />
-              </Suspense>
-            }
-          />
+          {/* The navbar reads the current URL, which is unknown while prerendering dynamic routes such as /confirmation/[reference]. */}
+          <Suspense fallback={<div className="h-[65px] border-b border-border/70 bg-white" />}>
+            <Navbar
+              account={
+                <Suspense fallback={<Skeleton className="h-9 w-40 rounded-full" />}>
+                  <AccountMenu variant="desktop" />
+                </Suspense>
+              }
+              mobileAccount={
+                <Suspense fallback={<Skeleton className="h-11 w-full rounded-full" />}>
+                  <AccountMenu variant="mobile" />
+                </Suspense>
+              }
+            />
+          </Suspense>
           <SavedHotelsProvider>
             <main id="main" className="flex-1">
               {children}

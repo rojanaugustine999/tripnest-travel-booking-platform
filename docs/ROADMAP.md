@@ -160,7 +160,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Result:** Public website fully database-driven.
 - **Status:** Done. Search/filter/sort/pagination run in the `search_hotels` SQL function (verified identical to the Phase 3 logic on 2,934 combinations). Hotel images still use Unsplash URLs; Supabase Storage is not used yet. The saved-hotels page itself is still a placeholder (Phase 8 dashboard).
 
-## Phase 7 — Booking Workflow
+## Phase 7 — Booking Workflow ✅
 
 - **Objective:** End-to-end demo booking.
 - **Tasks:** multi-step flow: hotel → room → dates → guests / rooms → guest information → review → confirm demo
@@ -176,6 +176,10 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Verify:** valid booking succeeds; past / reversed dates, too many guests, sold-out room, tampered price and
   double-submit are all rejected; booking appears in the database with the correct snapshot.
 - **Result:** Users can complete demo bookings.
+- **Status:** Done. The `create_booking` SQL function is the only way to make a booking (locks the room, checks every
+  night, recalculates the price, idempotent). Taxes are a flat 12% demo GST, no fees. Search results do not filter by
+  dates yet; the hotel page and booking page show live availability for chosen dates. Cancelling a booking comes with
+  the Phase 8 dashboard.
 
 ## Phase 8 — User Dashboard
 

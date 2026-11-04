@@ -1,4 +1,5 @@
 # TripNest — Master Project Instructions
+
 ## Full-Stack Travel Booking Platform
 
 **Project Name:** TripNest  

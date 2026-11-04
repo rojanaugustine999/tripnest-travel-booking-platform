@@ -179,7 +179,7 @@ export default async function HotelPage(props: PageProps<"/hotels/[slug]">) {
           description="Compare room types, then pick your dates and guests to see the price for your stay."
         />
         <Suspense fallback={<Skeleton className="h-[480px] w-full rounded-2xl" />}>
-          <RoomBooking hotelName={hotel.name} rooms={hotel.rooms} offer={hotel.offer} />
+          <RoomBooking hotelId={hotel.id} hotelSlug={hotel.slug} rooms={hotel.rooms} offer={hotel.offer} />
         </Suspense>
       </Section>
 

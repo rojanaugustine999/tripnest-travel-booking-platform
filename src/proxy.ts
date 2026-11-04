@@ -11,7 +11,15 @@ import type { Database } from "@/types/database";
  * calls requireUser()/requireAdmin(), and Row Level Security guards the data itself.
  */
 
-const PROTECTED_PREFIXES = ["/dashboard", "/bookings", "/saved-hotels", "/profile", "/admin"];
+const PROTECTED_PREFIXES = [
+  "/dashboard",
+  "/booking",
+  "/bookings",
+  "/confirmation",
+  "/saved-hotels",
+  "/profile",
+  "/admin",
+];
 const GUEST_ONLY_PATHS = ["/login", "/register", "/forgot-password"];
 
 const startsWithAny = (path: string, prefixes: string[]) =>
