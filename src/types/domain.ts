@@ -110,8 +110,19 @@ export type Review = {
   stayedOn: string;
 };
 
-/** A hotel joined with what listing cards need. */
-export type HotelSummary = Hotel & {
+/** What listing cards need (one cover image only; no long text). */
+export type HotelSummary = Omit<
+  Hotel,
+  | "description"
+  | "address"
+  | "facilities"
+  | "checkInTime"
+  | "checkOutTime"
+  | "cancellationPolicy"
+  | "amenityIds"
+  | "isPublished"
+  | "destinationId"
+> & {
   destination: Pick<Destination, "slug" | "name" | "country">;
   amenities: Amenity[];
   /** Cheapest room price per night (before offer discount). */

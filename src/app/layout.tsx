@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SavedHotelsProvider } from "@/features/saved-hotels/components/saved-hotels-provider";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -64,9 +65,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </Suspense>
             }
           />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
+          <SavedHotelsProvider>
+            <main id="main" className="flex-1">
+              {children}
+            </main>
+          </SavedHotelsProvider>
           <Footer />
           <Toaster position="top-center" />
         </TooltipProvider>

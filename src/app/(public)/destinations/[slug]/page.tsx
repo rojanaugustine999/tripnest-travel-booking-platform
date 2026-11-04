@@ -35,7 +35,7 @@ export default async function DestinationPage(props: PageProps<"/destinations/[s
   if (!destination) notFound();
 
   const [hotels, related] = await Promise.all([
-    getHotelsByDestination(destination.id, 6),
+    getHotelsByDestination(destination.slug, 6),
     getRelatedDestinations(destination, 3),
   ]);
 

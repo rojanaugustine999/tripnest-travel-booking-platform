@@ -30,10 +30,14 @@ const textArray = (values: string[]) =>
   values.length ? `array[${values.map(text).join(", ")}]::text[]` : "'{}'::text[]";
 const json = (value: unknown) => `${text(JSON.stringify(value))}::jsonb`;
 
-function insert(table: string, columns: string[], rows: string[][], conflict: string) {
+/** `refresh` lists columns to update when the row already exists (display order only, never content). */
+function insert(table: string, columns: string[], rows: string[][], conflict: string, refresh: string[] = []) {
   if (!rows.length) return "";
   const values = rows.map((r) => `  (${r.join(", ")})`).join(",\n");
-  return `insert into public.${table} (${columns.join(", ")}) values\n${values}\non conflict ${conflict} do nothing;\n`;
+  const onConflict = refresh.length
+    ? `do update set ${refresh.map((c) => `${c} = excluded.${c}`).join(", ")}`
+    : "do nothing";
+  return `insert into public.${table} (${columns.join(", ")}) values\n${values}\non conflict ${conflict} ${onConflict};\n`;
 }
 
 const amenityUuid = new Map(amenities.map((a) => [a.id, uuidFor(a.id)]));
@@ -71,9 +75,10 @@ const sections = [
   ),
   insert(
     "amenities",
-    ["id", "slug", "name"],
-    amenities.map((a) => [text(amenityUuid.get(a.id)), text(a.slug), text(a.name)]),
+    ["id", "slug", "name", "display_order"],
+    amenities.map((a, i) => [text(amenityUuid.get(a.id)), text(a.slug), text(a.name), num(i + 1)]),
     "(id)",
+    ["display_order"],
   ),
   insert(
     "hotels",
@@ -141,9 +146,10 @@ const sections = [
   ),
   insert(
     "hotel_amenities",
-    ["hotel_id", "amenity_id"],
-    hotels.flatMap((h) => h.amenityIds.map((a) => [text(uuidFor(h.id)), text(amenityUuid.get(a))])),
+    ["hotel_id", "amenity_id", "position"],
+    hotels.flatMap((h) => h.amenityIds.map((a, i) => [text(uuidFor(h.id)), text(amenityUuid.get(a)), num(i)])),
     "(hotel_id, amenity_id)",
+    ["position"],
   ),
   insert(
     "rooms",
@@ -198,7 +204,7 @@ const sections = [
 const sql = `-- =====================================================================================
 -- TripNest — SAMPLE DATA (fictional hotels, prices and reviews for demonstration only)
 -- GENERATED FILE: do not edit by hand. Run \`npm run db:seed:generate\` to rebuild it from
--- src/features/*/data. Safe to run more than once (rows with existing ids are skipped).
+-- src/features/*/data. Safe to run more than once (existing rows are kept; only display order is refreshed).
 -- Totals: ${destinations.length} destinations, ${hotels.length} hotels, ${roomsData.length} rooms, ${amenities.length} amenities, ${reviews.length} reviews.
 -- =====================================================================================
 

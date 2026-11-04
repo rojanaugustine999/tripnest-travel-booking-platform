@@ -7,8 +7,8 @@ import { FeatureCard } from "@/components/common/feature-card";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
-import { destinations } from "@/features/destinations/data/destinations";
-import { hotels } from "@/features/hotels/data/hotels";
+import { getDestinations } from "@/features/destinations/queries";
+import { getHotelSlugs } from "@/features/hotels/queries";
 import { photos } from "@/features/hotels/data/photos";
 
 export const metadata: Metadata = {
@@ -40,11 +40,12 @@ const values = [
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [destinations, hotelSlugs] = await Promise.all([getDestinations(), getHotelSlugs()]);
   const countries = new Set(destinations.map((d) => d.country)).size;
   const stats = [
     { value: destinations.length, label: "Destinations" },
-    { value: hotels.length, label: "Hand-picked hotels" },
+    { value: hotelSlugs.length, label: "Hand-picked hotels" },
     { value: countries, label: "Countries" },
   ];
 

@@ -9,17 +9,17 @@ It does not touch your existing `amazon-product-listing` project.
 
 ## Current status (4 November 2026)
 
-| Item               | Value                                                                      |
-| ------------------ | -------------------------------------------------------------------------- |
-| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects** |
-| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                    |
-| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                 |
-| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`      |
-| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                   |
-| `npm run db:check` | All 9 checks pass                                                          |
-| Security Advisor   | No issues                                                                  |
+| Item               | Value                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| Project            | `tripnest` (ref `cdpwcerbfsqibggnoazd`) in organization **Rojan Projects**             |
+| Region / plan      | `ap-south-1` South Asia (Mumbai) · Free                                                |
+| Project URL        | `https://cdpwcerbfsqibggnoazd.supabase.co`                                             |
+| Migrations applied | `initial_schema`, `functions_and_triggers`, `rls_policies_and_grants`, `search_hotels` |
+| Sample data        | Loaded and checksum-verified against `supabase/seed.sql`                               |
+| `npm run db:check` | All 9 checks pass                                                                      |
+| Security Advisor   | No issues                                                                              |
 
-Steps 1–4 below are already done; they stay here so the setup can be repeated (for example on a new
+Steps 1–4 below are already done (with the 4 migrations; Option A applies them all); they stay here so the setup can be repeated (for example on a new
 project). Step 5 is needed before Phase 5.
 
 ---

@@ -87,7 +87,7 @@ export default async function HotelPage(props: PageProps<"/hotels/[slug]">) {
           </div>
           <div className="flex items-center gap-4">
             <PriceTag price={hotel.priceFrom} offer={hotel.offer} prefix="From" align="right" />
-            <SaveHotelButton hotelName={hotel.name} size="icon" className="ring-1 ring-border" />
+            <SaveHotelButton hotelId={hotel.id} hotelName={hotel.name} size="icon" className="ring-1 ring-border" />
             <a
               href="#rooms"
               className="inline-flex h-11 items-center rounded-full bg-cta px-6 text-sm font-semibold text-cta-foreground shadow-sm hover:bg-coral-700"

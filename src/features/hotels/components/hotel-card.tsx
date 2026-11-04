@@ -62,7 +62,7 @@ export function HotelCard({ hotel, layout = "grid", searchQuery = "", className 
             {hotel.offer.discountPercent}% off · {hotel.offer.label}
           </Badge>
         )}
-        <SaveHotelButton hotelName={hotel.name} className="absolute top-3 right-3" />
+        <SaveHotelButton hotelId={hotel.id} hotelName={hotel.name} className="absolute top-3 right-3" />
       </div>
 
       <div className={cn("flex flex-1 flex-col p-5", isList && "sm:p-6")}>

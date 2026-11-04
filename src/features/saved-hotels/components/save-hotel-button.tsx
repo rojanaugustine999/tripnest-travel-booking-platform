@@ -1,33 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { setHotelSaved } from "../actions";
+import { useSavedHotels } from "./saved-hotels-provider";
 
 type SaveHotelButtonProps = {
+  hotelId: string;
   hotelName: string;
   className?: string;
   size?: "icon-sm" | "icon";
 };
 
 /**
- * Save / unsave toggle. Phase 3: remembered only for the current page visit (demo).
- * Phase 6: persisted to the `saved_hotels` table for signed-in users.
+ * Save / unsave toggle. Signed-in users' choices are stored in `saved_hotels`;
+ * signed-out visitors are sent to log in and brought back to this page.
  */
-export function SaveHotelButton({ hotelName, className, size = "icon-sm" }: SaveHotelButtonProps) {
-  const [saved, setSaved] = useState(false);
+export function SaveHotelButton({ hotelId, hotelName, className, size = "icon-sm" }: SaveHotelButtonProps) {
+  const { signedIn, savedIds, setSaved } = useSavedHotels();
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+  const saved = savedIds.has(hotelId);
 
   function toggle() {
-    setSaved((value) => !value);
-    if (saved) {
-      toast(`${hotelName} removed from saved hotels`);
-    } else {
-      toast.success(`${hotelName} saved`, {
-        description: "Demo only — saved hotels will sync to your account once sign-in is available.",
-      });
+    if (!signedIn) {
+      router.push(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+      return;
     }
+    const next = !saved;
+    setSaved(hotelId, next); // show the change immediately
+    startTransition(async () => {
+      const result = await setHotelSaved(hotelId, next);
+      if (result.ok) {
+        toast(next ? `${hotelName} saved` : `${hotelName} removed from saved hotels`);
+      } else {
+        setSaved(hotelId, !next); // undo
+        if (result.signedOut) router.push(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+        else toast.error(result.message);
+      }
+    });
   }
 
   return (
@@ -36,6 +51,7 @@ export function SaveHotelButton({ hotelName, className, size = "icon-sm" }: Save
       size={size}
       aria-pressed={saved}
       aria-label={saved ? `Remove ${hotelName} from saved hotels` : `Save ${hotelName}`}
+      disabled={pending}
       onClick={toggle}
       className={cn("relative z-10 border-0 bg-white/95 shadow-sm backdrop-blur hover:bg-white", className)}
     >

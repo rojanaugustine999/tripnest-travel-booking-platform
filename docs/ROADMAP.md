@@ -146,7 +146,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   routes; ordinary users blocked from `/admin` on the server.
 - **Result:** Working authentication with user and admin roles.
 
-## Phase 6 — Hotel and Destination Data Integration
+## Phase 6 — Hotel and Destination Data Integration ✅
 
 - **Objective:** Replace sample data with live Supabase data.
 - **Tasks:** destination, hotel, image, amenity and room queries; search, filter and sort as database queries;
@@ -158,6 +158,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Verify:** results match the database for every filter / sort; pagination; save button respects auth; error
   and empty states display; no unnecessary requests.
 - **Result:** Public website fully database-driven.
+- **Status:** Done. Search/filter/sort/pagination run in the `search_hotels` SQL function (verified identical to the Phase 3 logic on 2,934 combinations). Hotel images still use Unsplash URLs; Supabase Storage is not used yet. The saved-hotels page itself is still a placeholder (Phase 8 dashboard).
 
 ## Phase 7 — Booking Workflow
 

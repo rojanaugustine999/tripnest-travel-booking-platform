@@ -19,16 +19,19 @@ export type Database = {
     Tables: {
       amenities: {
         Row: {
+          display_order: number
           id: string
           name: string
           slug: string
         }
         Insert: {
+          display_order?: number
           id?: string
           name: string
           slug: string
         }
         Update: {
+          display_order?: number
           id?: string
           name?: string
           slug?: string
@@ -266,14 +269,17 @@ export type Database = {
         Row: {
           amenity_id: string
           hotel_id: string
+          position: number
         }
         Insert: {
           amenity_id: string
           hotel_id: string
+          position?: number
         }
         Update: {
           amenity_id?: string
           hotel_id?: string
+          position?: number
         }
         Relationships: [
           {
@@ -634,7 +640,46 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_hotels: {
+        Args: {
+          p_amenities?: string[]
+          p_available_only?: boolean
+          p_destination?: string
+          p_guests?: number
+          p_max_price?: number
+          p_min_price?: number
+          p_min_rating?: number
+          p_page?: number
+          p_page_size?: number
+          p_query?: string
+          p_rooms?: number
+          p_sort?: string
+          p_stars?: number[]
+          p_types?: Database["public"]["Enums"]["accommodation_type"][]
+        }
+        Returns: {
+          accommodation_type: Database["public"]["Enums"]["accommodation_type"]
+          amenities: Json
+          city: string
+          cover_image: Json
+          destination: Json
+          has_availability: boolean
+          id: string
+          is_featured: boolean
+          name: string
+          offer_discount_percent: number
+          offer_label: string
+          page: number
+          popularity: number
+          price_from: number
+          review_count: number
+          review_score: number
+          short_description: string
+          slug: string
+          star_rating: number
+          total_count: number
+        }[]
+      }
     }
     Enums: {
       accommodation_type:

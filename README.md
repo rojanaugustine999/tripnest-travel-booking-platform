@@ -79,9 +79,9 @@ Supabase Auth with email + password (`@supabase/ssr`, Server Actions, Zod valida
 
 ## Sample data
 
-The public pages still read the typed sample data in `src/features/*/data` (Phase 6 switches them to Supabase).
-The same data is loaded into the database by `supabase/seed.sql`, generated from those files. Pages only call
-the async functions in `features/*/queries.ts`, so switching the source does not change any page.
+The public pages read live data from Supabase (hotel search runs in the `search_hotels` SQL function; catalogue reads are
+cached with `use cache`). The typed sample files in `src/features/*/data` are now only the source for `supabase/seed.sql`
+(`npm run db:seed:generate`).
 Photos are from Unsplash (free to use under the Unsplash licence). All hotels, prices and reviews are fictional.
 
 ## Design system
