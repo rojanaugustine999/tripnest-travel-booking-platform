@@ -244,6 +244,7 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Depends on:** Phase 10.
 - **Verify:** live site passes a smoke test of auth, search, booking, dashboard and admin.
 - **Result:** TripNest live on Vercel and in the portfolio.
+- **Status:** Done. Live at https://tripnest-travel-booking-platform.vercel.app (Vercel Hobby, Production, auto-deploys from `main`). See `docs/DEPLOYMENT.md`.
 
 ---
 

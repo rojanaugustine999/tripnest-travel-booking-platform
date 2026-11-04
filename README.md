@@ -3,6 +3,8 @@
 A full-stack hotel booking platform built as a portfolio project: search and compare hotels, choose a room, complete a
 **demo** booking, manage your trips, and run the whole thing from an admin dashboard.
 
+**Live demo:** <https://tripnest-travel-booking-platform.vercel.app>
+
 > **Demo project.** All hotels, prices and reviews are fictional sample data, and bookings are demonstrations only.
 > **No payment is taken and no real hotel is contacted.** Photos are from Unsplash.
 
