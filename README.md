@@ -102,6 +102,7 @@ update public.profiles set role = 'admin' where email = 'your-email@example.com'
 | `npm run lint`             | ESLint                                                                          |
 | `npm run typecheck`        | TypeScript type-check                                                           |
 | `npm run format`           | Format with Prettier                                                            |
+| `npm test`                 | Vitest unit tests (redirect guard, prices, validators)                          |
 | `npm run test:logic`       | Check validators, price maths and the redirect guard with hostile input         |
 | `npm run db:check`         | Test the live Supabase project as a signed-out visitor (reads `.env.local`)     |
 | `npm run db:security`      | Probe the live database like an attacker (reads, writes, functions)             |
