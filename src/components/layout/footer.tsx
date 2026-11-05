@@ -47,7 +47,7 @@ export function Footer() {
           <p>
             © <CurrentYear /> {siteConfig.name}. All rights reserved.
           </p>
-          <p>{siteConfig.tagline}</p>
+          <p>Designed &amp; Developed by Rojan Augustine.</p>
         </Container>
       </div>
     </footer>
