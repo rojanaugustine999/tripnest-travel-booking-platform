@@ -1,23 +1,23 @@
 import { Suspense } from "react";
 import Image from "next/image";
-import { ArrowRight, BadgePercent, CalendarCheck, Headset, Info, Quote, ShieldCheck } from "lucide-react";
-import { siteConfig } from "@/config/site";
+import { ArrowRight, BadgePercent, CalendarCheck, Headset, Quote, ShieldCheck, Timer } from "lucide-react";
+import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { GithubIcon } from "@/components/ui/github-icon";
 import { FeatureCard } from "@/components/common/feature-card";
 import { RatingStars } from "@/components/common/rating-stars";
 import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { DestinationCard } from "@/features/destinations/components/destination-card";
-import { getPopularDestinations } from "@/features/destinations/queries";
+import { getDestinationSlugs, getPopularDestinations } from "@/features/destinations/queries";
 import { photos } from "@/features/hotels/data/photos";
 import { HotelCard } from "@/features/hotels/components/hotel-card";
 import { HotelSearchForm } from "@/features/hotels/components/hotel-search-form";
 import { OfferCard } from "@/features/hotels/components/offer-card";
 import { SearchFormFallback } from "@/features/hotels/components/search-form-fallback";
-import { getFeaturedHotels, getHotelOffers, getSearchSuggestions } from "@/features/hotels/queries";
+import { getFeaturedHotels, getHotelOffers, getHotelSlugs, getSearchSuggestions } from "@/features/hotels/queries";
 import { NewsletterForm } from "@/features/marketing/components/newsletter-form";
+import { TrustStrip } from "@/features/marketing/components/trust-strip";
 import { testimonials } from "@/features/marketing/data/testimonials";
 
 const reasons = [
@@ -44,11 +44,13 @@ const reasons = [
 ];
 
 export default async function HomePage() {
-  const [suggestions, destinations, featured, offers] = await Promise.all([
+  const [suggestions, destinations, featured, offers, hotelSlugs, destinationSlugs] = await Promise.all([
     getSearchSuggestions(),
     getPopularDestinations(6),
-    getFeaturedHotels(6),
+    getFeaturedHotels(4),
     getHotelOffers(3),
+    getHotelSlugs(),
+    getDestinationSlugs(),
   ]);
 
   return (
@@ -82,29 +84,26 @@ export default async function HomePage() {
             <Suspense fallback={<SearchFormFallback />}>
               <HotelSearchForm suggestions={suggestions} />
             </Suspense>
+            <nav
+              aria-label="Popular destinations"
+              className="mt-5 flex flex-wrap items-center gap-2 text-sm text-white"
+            >
+              <span className="mr-1 font-medium text-white/80">Popular:</span>
+              {destinations.slice(0, 5).map((destination) => (
+                <Link
+                  key={destination.id}
+                  href={`/destinations/${destination.slug}`}
+                  className="rounded-full bg-white/15 px-3.5 py-1.5 font-medium backdrop-blur-sm transition-colors hover:bg-white/25 focus-visible:ring-3 focus-visible:ring-white/60 focus-visible:outline-none"
+                >
+                  {destination.name}
+                </Link>
+              ))}
+            </nav>
           </div>
         </Container>
       </section>
 
-      {/* Demo notice: this is a portfolio project, so say so near the top. */}
-      <div className="border-b border-amber-200 bg-amber-50">
-        <Container className="flex flex-wrap items-center gap-x-3 gap-y-1 py-3 text-sm text-amber-950">
-          <Info className="size-4 shrink-0" aria-hidden="true" />
-          <p>
-            <strong>Portfolio demo.</strong> Hotels and reviews are sample data, and payments run in Razorpay{" "}
-            <strong>test mode</strong>: no real money, no real reservations.
-          </p>
-          <a
-            href={siteConfig.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold underline underline-offset-2 hover:no-underline"
-          >
-            <GithubIcon className="size-4" />
-            View the source
-          </a>
-        </Container>
-      </div>
+      <TrustStrip hotelCount={hotelSlugs.length} destinationCount={destinationSlugs.length} />
 
       {/* Popular destinations */}
       <Section>
@@ -137,31 +136,56 @@ export default async function HomePage() {
             </ButtonLink>
           }
         />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Phones: swipe sideways. Larger screens: a single tidy row. */}
+        <ul className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
           {featured.map((hotel) => (
-            <HotelCard key={hotel.id} hotel={hotel} />
+            <li key={hotel.id} className="w-[82%] shrink-0 snap-start sm:w-auto">
+              <HotelCard hotel={hotel} className="h-full" />
+            </li>
           ))}
-        </div>
+        </ul>
       </Section>
 
-      {/* Special offers */}
-      <Section>
-        <SectionHeading
-          eyebrow="Deals"
-          title="Special offers"
-          description="Limited-time savings on selected hotels. Discounts are already included in the prices shown."
-          action={
-            <ButtonLink href="/hotels?sort=price-asc" variant="outline" size="sm">
+      {/* Special offers: a dark band so the deals stand out from the white and grey sections around it. */}
+      <section
+        aria-labelledby="offers-heading"
+        className="relative isolate overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-lagoon-900 py-16 sm:py-20"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -right-24 -z-10 size-96 rounded-full bg-coral-500/20 blur-3xl"
+        />
+        <Container>
+          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-coral-500 px-3 py-1 text-xs font-bold tracking-wide text-white uppercase">
+                <Timer className="size-3.5" aria-hidden="true" />
+                Limited-time deals
+              </p>
+              <h2 id="offers-heading" className="text-h3 text-white sm:text-h2">
+                Special offers
+              </h2>
+              <p className="mt-3 text-slate-300">
+                Savings on selected hotels, already included in the prices shown. Offers change, so book while they
+                last.
+              </p>
+            </div>
+            <ButtonLink
+              href="/hotels?sort=price-asc"
+              variant="outline"
+              size="sm"
+              className="shrink-0 border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
+            >
               See best prices <ArrowRight />
             </ButtonLink>
-          }
-        />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {offers.map((hotel) => (
-            <OfferCard key={hotel.id} hotel={hotel} />
-          ))}
-        </div>
-      </Section>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {offers.map((hotel) => (
+              <OfferCard key={hotel.id} hotel={hotel} />
+            ))}
+          </div>
+        </Container>
+      </section>
 
       {/* Why choose TripNest */}
       <Section muted>

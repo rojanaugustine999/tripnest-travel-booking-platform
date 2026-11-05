@@ -67,7 +67,7 @@ export function HotelSearchForm({ suggestions, variant = "hero", className }: Ho
   }
 
   const isHero = variant === "hero";
-  const labelClass = cn("text-xs font-semibold tracking-wide text-slate-600 uppercase", !isHero && "sr-only");
+  const labelClass = cn("text-xs font-semibold tracking-wide text-slate-700 uppercase", !isHero && "sr-only");
 
   return (
     <form
@@ -77,7 +77,7 @@ export function HotelSearchForm({ suggestions, variant = "hero", className }: Ho
       className={cn(
         "grid gap-3 rounded-2xl bg-white",
         isHero
-          ? "p-4 shadow-card-hover sm:p-5 lg:grid-cols-[1.4fr_1.3fr_1fr_auto] lg:items-end"
+          ? "p-5 shadow-2xl ring-1 ring-white/60 sm:p-6 lg:grid-cols-[1.4fr_1.3fr_1fr_auto] lg:items-end"
           : "p-3 shadow-card ring-1 ring-slate-900/5 md:grid-cols-[1.4fr_1.3fr_1fr_auto]",
         className,
       )}
@@ -101,7 +101,10 @@ export function HotelSearchForm({ suggestions, variant = "hero", className }: Ho
             list={`${uid}-suggestions`}
             placeholder="Where are you going?"
             autoComplete="off"
-            className="h-11 w-full rounded-lg border border-input bg-white pr-3.5 pl-10 text-sm outline-none placeholder:text-muted-foreground hover:border-navy-300 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn(
+              "h-11 w-full rounded-lg border border-input bg-white pr-3.5 pl-10 text-sm outline-none placeholder:text-muted-foreground hover:border-navy-300 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+              isHero && "h-12 text-base",
+            )}
           />
           <datalist id={`${uid}-suggestions`}>
             {suggestions.map((s) => (
@@ -124,6 +127,7 @@ export function HotelSearchForm({ suggestions, variant = "hero", className }: Ho
           }}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${uid}-error` : undefined}
+          className={isHero ? "h-12 text-base" : undefined}
         />
       </div>
 
@@ -131,7 +135,12 @@ export function HotelSearchForm({ suggestions, variant = "hero", className }: Ho
         <Label htmlFor={`${uid}-party`} className={labelClass}>
           Guests & rooms
         </Label>
-        <GuestRoomPicker id={`${uid}-party`} value={party} onChange={setParty} />
+        <GuestRoomPicker
+          id={`${uid}-party`}
+          value={party}
+          onChange={setParty}
+          className={isHero ? "h-12 text-base" : undefined}
+        />
       </div>
 
       <Button

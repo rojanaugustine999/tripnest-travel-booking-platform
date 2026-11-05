@@ -108,9 +108,9 @@ export function HotelCard({ hotel, layout = "grid", searchQuery = "", className,
           </div>
           <span
             aria-hidden="true"
-            className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-navy-800"
+            className="inline-flex h-9 shrink-0 items-center rounded-full bg-primary px-4 text-sm font-semibold whitespace-nowrap text-primary-foreground transition-colors group-hover:bg-navy-800"
           >
-            View details
+            {isList ? "View details" : "Details"}
           </span>
         </div>
       </div>
