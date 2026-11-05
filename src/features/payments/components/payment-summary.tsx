@@ -1,6 +1,9 @@
 import { CreditCard } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
 import type { BookingPayment } from "../queries";
+
+/** Exact amount (with paise), so the receipt matches what Razorpay charged. */
+const rupees = (paise: number) =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", minimumFractionDigits: 2 }).format(paise / 100);
 
 /** A one-line receipt for a test payment. */
 export function PaymentSummary({ payment }: { payment: BookingPayment }) {
@@ -9,7 +12,7 @@ export function PaymentSummary({ payment }: { payment: BookingPayment }) {
       <CreditCard className="mt-0.5 size-4 shrink-0 text-lagoon-700" aria-hidden="true" />
       <div>
         <p className="font-medium">
-          {payment.isTest ? "Paid in Razorpay test mode" : "Paid"} · {formatPrice(payment.amountPaise / 100)}
+          {payment.isTest ? "Paid in Razorpay test mode" : "Paid"} · {rupees(payment.amountPaise)}
         </p>
         <p className="text-muted-foreground">
           Payment ID <span className="font-mono">{payment.paymentId}</span> ·{" "}

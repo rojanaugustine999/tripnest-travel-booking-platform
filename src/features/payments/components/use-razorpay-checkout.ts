@@ -60,6 +60,7 @@ export function useRazorpayCheckout() {
       const Razorpay = window.Razorpay;
 
       return new Promise<CheckoutOutcome>((resolve) => {
+        let lastFailure: string | null = null;
         const checkout = new Razorpay({
           key: started.keyId,
           order_id: started.orderId,
@@ -86,15 +87,14 @@ export function useRazorpayCheckout() {
               ),
             );
           },
-          modal: { ondismiss: () => resolve(finish({ status: "dismissed" })) },
+          // The popup lets the guest retry after a failed attempt, so we only finish when they succeed or close it.
+          modal: {
+            ondismiss: () =>
+              resolve(finish(lastFailure ? { status: "failed", message: lastFailure } : { status: "dismissed" })),
+          },
         });
         checkout.on("payment.failed", (failure) => {
-          resolve(
-            finish({
-              status: "failed",
-              message: failure.error?.description ?? "The payment did not go through. You can try again.",
-            }),
-          );
+          lastFailure = failure.error?.description ?? "The payment did not go through. You can try again.";
         });
         checkout.open();
       });
