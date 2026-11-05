@@ -6,9 +6,12 @@ export const siteConfig = {
   description:
     "Discover destinations, compare hotels and rooms, and complete a demo booking in minutes. Manage every stay from your TripNest dashboard.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Source code of this portfolio project. */
+  repoUrl: "https://github.com/rojanaugustine999/tripnest-travel-booking-platform",
+  /** Real contact details are optional: set NEXT_PUBLIC_CONTACT_EMAIL / NEXT_PUBLIC_CONTACT_PHONE to show them. */
   contact: {
-    email: "hello@tripnest.example",
-    phone: "+91 00000 00000",
+    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || null,
+    phone: process.env.NEXT_PUBLIC_CONTACT_PHONE?.trim() || null,
   },
 } as const;
 

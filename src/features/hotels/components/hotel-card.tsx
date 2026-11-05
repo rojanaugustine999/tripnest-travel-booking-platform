@@ -16,6 +16,8 @@ type HotelCardProps = {
   /** Query string carried to the details page so dates and guests are kept. */
   searchQuery?: string;
   className?: string;
+  /** Set for the first card on a page: its photo is the largest thing on screen, so it must not be lazy-loaded. */
+  priority?: boolean;
 };
 
 const TYPE_LABEL: Record<HotelSummary["accommodationType"], string> = {
@@ -26,7 +28,7 @@ const TYPE_LABEL: Record<HotelSummary["accommodationType"], string> = {
   apartment: "Apartment",
 };
 
-export function HotelCard({ hotel, layout = "grid", searchQuery = "", className }: HotelCardProps) {
+export function HotelCard({ hotel, layout = "grid", searchQuery = "", className, priority = false }: HotelCardProps) {
   const href = `/hotels/${hotel.slug}${searchQuery}`;
   const isList = layout === "list";
   const shownAmenities = hotel.amenities.slice(0, isList ? 5 : 3);
@@ -50,6 +52,7 @@ export function HotelCard({ hotel, layout = "grid", searchQuery = "", className 
           src={hotel.images[0].url}
           alt={hotel.images[0].alt}
           fill
+          preload={priority}
           sizes={
             isList
               ? "(min-width: 1024px) 320px, (min-width: 640px) 288px, 100vw"

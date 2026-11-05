@@ -57,10 +57,11 @@ async function HotelResults({ searchParams }: { searchParams: PageProps<"/hotels
       <HotelToolbar amenities={amenities} total={results.total} />
       {results.items.length ? (
         <>
+          <h2 className="sr-only">Hotel results</h2>
           <ul className="space-y-6">
-            {results.items.map((hotel) => (
+            {results.items.map((hotel, index) => (
               <li key={hotel.id}>
-                <HotelCard hotel={hotel} layout="list" searchQuery={stayQuery} />
+                <HotelCard hotel={hotel} layout="list" searchQuery={stayQuery} priority={index === 0} />
               </li>
             ))}
           </ul>

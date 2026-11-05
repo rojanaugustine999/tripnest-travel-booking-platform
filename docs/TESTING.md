@@ -87,3 +87,19 @@ Optimisation made: the Supabase browser library (68 KB compressed) was loaded on
 - **Two-account isolation test:** done with database tests and explicit filters, not two real logins (accounts must be created by the owner). To check by hand: register a second account and confirm each account's bookings, saved hotels and profile are separate.
 - **Not exercised:** a real network outage (the error boundary exists but was not triggered), screen-reader walkthrough, Lighthouse scores (no Lighthouse run was possible in this environment).
 - **Automated browser tests (Playwright) and a test framework (Vitest)** were not added; proposed, awaiting a decision.
+
+## Lighthouse (Phase 12 follow-up, production build, mobile emulation)
+
+Run with Lighthouse 12 against `next start` on localhost (simulated slow 4G, 4x CPU slowdown).
+
+| Page          | Performance | Accessibility | Best practices | SEO                       |
+| ------------- | ----------- | ------------- | -------------- | ------------------------- |
+| Home          | 80          | 100           | 96             | 100                       |
+| Hotels        | 81          | 100           | 96             | 100                       |
+| Hotel details | 79          | 100           | 96             | 100                       |
+| Login         | 90          | 100           | 96             | 60 (`noindex` on purpose) |
+
+Fixed after the first run: footer text contrast, heading order on the hotels list, an invalid `<dl>` on hotel pages,
+and the first result photo being lazy-loaded. What is left: Largest Contentful Paint is 4.5–5 s in the simulation
+(the big photo comes from Unsplash through `next/image`; the real load on a normal connection is far quicker), plus
+framework JavaScript that Next.js ships. Pages are already prerendered and cached.

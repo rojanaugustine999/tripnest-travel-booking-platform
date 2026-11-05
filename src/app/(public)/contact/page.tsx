@@ -4,6 +4,7 @@ import { siteConfig } from "@/config/site";
 import { Breadcrumbs } from "@/components/common/breadcrumbs";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
+import { GithubIcon } from "@/components/ui/github-icon";
 import { ContactForm } from "@/features/marketing/components/contact-form";
 
 export const metadata: Metadata = {
@@ -11,9 +12,12 @@ export const metadata: Metadata = {
   description: "Questions about a booking, your account or listing a property? Get in touch with the TripNest team.",
 };
 
-const details = [
-  { icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}` },
-  { icon: Phone, label: "Phone", value: siteConfig.contact.phone },
+const details: { icon: React.ElementType; label: string; value: string; href?: string }[] = [
+  ...(siteConfig.contact.email
+    ? [{ icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}` }]
+    : []),
+  ...(siteConfig.contact.phone ? [{ icon: Phone, label: "Phone", value: siteConfig.contact.phone }] : []),
+  { icon: GithubIcon, label: "Source code", value: "github.com/rojanaugustine999", href: siteConfig.repoUrl },
   { icon: Clock, label: "Support hours", value: "Mon–Sat, 9:00 – 19:00 IST" },
   { icon: MapPin, label: "Office", value: "Kochi, Kerala, India" },
 ];
@@ -59,7 +63,8 @@ export default function ContactPage() {
               ))}
             </ul>
             <p className="rounded-xl bg-slate-50 p-4 text-xs text-muted-foreground">
-              TripNest is a portfolio project. Contact details are placeholders and the form does not send messages yet.
+              TripNest is a portfolio project. Support hours and the office are fictional, and the form does not send
+              messages yet.
             </p>
           </aside>
         </div>

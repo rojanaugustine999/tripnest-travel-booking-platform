@@ -135,37 +135,37 @@ export default async function HotelPage(props: PageProps<"/hotels/[slug]">) {
               Good to know
             </h2>
             <dl className="mt-5 space-y-5 text-sm">
-              <div className="flex gap-3">
-                <LogIn className="mt-0.5 size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
-                <div>
-                  <dt className="font-semibold text-slate-900">Check-in</dt>
-                  <dd className="text-slate-600">From {formatTime(hotel.checkInTime)}</dd>
-                </div>
+              <div>
+                <dt className="flex items-center gap-3 font-semibold text-slate-900">
+                  <LogIn className="size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
+                  Check-in
+                </dt>
+                <dd className="pl-8 text-slate-600">From {formatTime(hotel.checkInTime)}</dd>
               </div>
-              <div className="flex gap-3">
-                <LogOut className="mt-0.5 size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
-                <div>
-                  <dt className="font-semibold text-slate-900">Check-out</dt>
-                  <dd className="text-slate-600">Until {formatTime(hotel.checkOutTime)}</dd>
-                </div>
+              <div>
+                <dt className="flex items-center gap-3 font-semibold text-slate-900">
+                  <LogOut className="size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
+                  Check-out
+                </dt>
+                <dd className="pl-8 text-slate-600">Until {formatTime(hotel.checkOutTime)}</dd>
               </div>
-              <div className="flex gap-3">
-                <ShieldCheck className="mt-0.5 size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
-                <div>
-                  <dt className="font-semibold text-slate-900">Cancellation</dt>
-                  <dd className="text-slate-600">{hotel.cancellationPolicy}</dd>
-                </div>
+              <div>
+                <dt className="flex items-center gap-3 font-semibold text-slate-900">
+                  <ShieldCheck className="size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
+                  Cancellation
+                </dt>
+                <dd className="pl-8 text-slate-600">{hotel.cancellationPolicy}</dd>
               </div>
-              <div className="flex gap-3">
-                <CalendarClock className="mt-0.5 size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
-                <div>
-                  <dt className="font-semibold text-slate-900">Availability</dt>
-                  <dd className="text-slate-600">
-                    {availableRoomTypes > 0
-                      ? `${availableRoomTypes} of ${hotel.rooms.length} room types available for your dates.`
-                      : "Fully booked for now. Try different dates."}
-                  </dd>
-                </div>
+              <div>
+                <dt className="flex items-center gap-3 font-semibold text-slate-900">
+                  <CalendarClock className="size-5 shrink-0 text-lagoon-700" aria-hidden="true" />
+                  Availability
+                </dt>
+                <dd className="pl-8 text-slate-600">
+                  {availableRoomTypes > 0
+                    ? `${availableRoomTypes} of ${hotel.rooms.length} room types available for your dates.`
+                    : "Fully booked for now. Try different dates."}
+                </dd>
               </div>
             </dl>
           </aside>

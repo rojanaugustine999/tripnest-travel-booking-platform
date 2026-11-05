@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import Image from "next/image";
-import { ArrowRight, BadgePercent, CalendarCheck, Headset, Quote, ShieldCheck } from "lucide-react";
+import { ArrowRight, BadgePercent, CalendarCheck, Headset, Info, Quote, ShieldCheck } from "lucide-react";
+import { siteConfig } from "@/config/site";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { GithubIcon } from "@/components/ui/github-icon";
 import { FeatureCard } from "@/components/common/feature-card";
 import { RatingStars } from "@/components/common/rating-stars";
 import { Section } from "@/components/common/section";
@@ -53,7 +55,16 @@ export default async function HomePage() {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <Image src={photos.heroBeach} alt="" fill preload sizes="100vw" className="-z-20 object-cover" />
+        <Image
+          src={photos.heroBeach}
+          alt=""
+          fill
+          preload
+
+          quality={60}
+          sizes="100vw"
+          className="-z-20 object-cover"
+        />
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/80"
@@ -74,6 +85,26 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
+
+      {/* Demo notice: this is a portfolio project, so say so near the top. */}
+      <div className="border-b border-amber-200 bg-amber-50">
+        <Container className="flex flex-wrap items-center gap-x-3 gap-y-1 py-3 text-sm text-amber-950">
+          <Info className="size-4 shrink-0" aria-hidden="true" />
+          <p>
+            <strong>Portfolio demo.</strong> Hotels and reviews are sample data, and payments run in Razorpay{" "}
+            <strong>test mode</strong>: no real money, no real reservations.
+          </p>
+          <a
+            href={siteConfig.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 font-semibold underline underline-offset-2 hover:no-underline"
+          >
+            <GithubIcon className="size-4" />
+            View the source
+          </a>
+        </Container>
+      </div>
 
       {/* Popular destinations */}
       <Section>
@@ -149,7 +180,7 @@ export default async function HomePage() {
 
       {/* Testimonials */}
       <Section>
-        <SectionHeading align="center" eyebrow="Testimonials" title="What travellers say" />
+        <SectionHeading align="center" eyebrow="Sample testimonials" title="What travellers say" />
         <div className="grid gap-6 md:grid-cols-3">
           {testimonials.map((t) => (
             <figure key={t.name} className="flex flex-col rounded-2xl bg-card p-7 shadow-card ring-1 ring-slate-900/5">
