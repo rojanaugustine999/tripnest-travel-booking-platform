@@ -7,15 +7,17 @@ const isProduction = process.env.NODE_ENV === "production";
  * - 'unsafe-inline' scripts/styles are needed by Next.js (hydration data, styled components); a per-request nonce
  *   would force every page to render dynamically and lose caching, so this is the practical middle ground.
  * - Images come from our own site and Unsplash (sample photography); API calls go to our Supabase project only.
+ * - Razorpay (test-mode payments) is allowed for its checkout script, payment window (iframe) and API.
  * - Only applied in production: the dev server needs eval and websockets for hot reload.
  */
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://images.unsplash.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://*.razorpay.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.razorpay.com https://lumberjack.razorpay.com",
+  "frame-src https://api.razorpay.com https://checkout.razorpay.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

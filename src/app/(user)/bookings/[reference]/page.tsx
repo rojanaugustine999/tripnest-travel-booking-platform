@@ -7,17 +7,23 @@ import { BookingDetails } from "@/features/bookings/components/booking-details";
 import { CancelBookingButton } from "@/features/bookings/components/cancel-booking-button";
 import { StatusBadge } from "@/features/bookings/components/status-badge";
 import { getMyBooking, isCancellable } from "@/features/bookings/queries";
+import { PayNowButton } from "@/features/payments/components/pay-now-button";
+import { PaymentSummary } from "@/features/payments/components/payment-summary";
+import { getBookingPayment } from "@/features/payments/queries";
 import { requireUser } from "@/lib/auth/session";
+import { getRazorpayConfig } from "@/lib/payments/razorpay";
 
 export const metadata: Metadata = { title: "Booking details", robots: { index: false } };
 
 async function BookingContent({ params }: { params: PageProps<"/bookings/[reference]">["params"] }) {
   const { reference } = await params;
-  await requireUser(`/bookings/${reference}`);
+  const profile = await requireUser(`/bookings/${reference}`);
 
   // Only ever the signed-in user's own booking; anyone else's reference is simply "not found".
   const booking = await getMyBooking(reference);
   if (!booking) notFound();
+  const payment = await getBookingPayment(booking.id);
+  const canPay = booking.status === "pending" && getRazorpayConfig() !== null;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -37,12 +43,23 @@ async function BookingContent({ params }: { params: PageProps<"/bookings/[refere
       </div>
       <div className="flex gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-        <p>Demo booking — no payment was taken and no real hotel was contacted.</p>
+        <p>Demo booking — no real money was taken and no real hotel was contacted.</p>
       </div>
       {booking.status === "cancelled" && booking.cancelled_at && (
         <p className="text-sm text-muted-foreground">
           Cancelled on {new Date(booking.cancelled_at).toLocaleDateString("en-IN", { dateStyle: "long" })}.
         </p>
+      )}
+      {payment && <PaymentSummary payment={payment} />}
+      {canPay && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
+          <p className="flex-1">Payment pending. Your room is held for 15 minutes after booking.</p>
+          <PayNowButton
+            reference={booking.reference}
+            size="default"
+            prefill={{ name: profile.full_name ?? "", email: profile.email }}
+          />
+        </div>
       )}
       <BookingDetails booking={booking} />
       {isCancellable(booking) && (

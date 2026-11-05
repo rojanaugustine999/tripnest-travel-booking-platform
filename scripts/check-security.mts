@@ -34,6 +34,7 @@ for (const table of [
   "saved_hotels",
   "newsletter_subscribers",
   "contact_messages",
+  "payments",
 ]) {
   const { data, error } = await supabase.from(table).select("*").limit(1);
   report(`cannot read ${table}`, Boolean(error) || (data?.length ?? 0) === 0, error?.message ?? "no rows returned");
@@ -88,6 +89,18 @@ const forbidden: [string, Record<string, unknown>][] = [
     },
   ],
   ["cancel_booking", { p_reference: "TN-ZZZZZZZZ" }],
+  [
+    "confirm_booking_payment",
+    {
+      p_reference: "TN-ZZZZZZZZ",
+      p_order_id: "order_probe0001",
+      p_payment_id: "pay_probe00001",
+      p_signature: "x",
+      p_amount_paise: 100,
+      p_binding: "x",
+    },
+  ],
+  ["expire_pending_bookings", {}],
   ["admin_dashboard_stats", {}],
   ["admin_save_hotel", { p_hotel: {} }],
   ["admin_set_booking_status", { p_reference: "TN-ZZZZZZZZ", p_status: "confirmed" }],

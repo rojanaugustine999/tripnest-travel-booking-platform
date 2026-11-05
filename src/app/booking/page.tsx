@@ -8,6 +8,7 @@ import { BookingFlow } from "@/features/bookings/components/booking-flow";
 import { stayParamsSchema } from "@/features/bookings/validation";
 import { getHotelBySlug } from "@/features/hotels/queries";
 import { requireUser } from "@/lib/auth/session";
+import { getRazorpayConfig } from "@/lib/payments/razorpay";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Book your stay", robots: { index: false } };
@@ -107,6 +108,7 @@ async function BookingContent({ searchParams }: { searchParams: SearchParams }) 
         rooms: stay.rooms,
       }}
       prefill={{ fullName: profile.full_name ?? "", email: profile.email }}
+      testPayments={getRazorpayConfig() !== null}
     />
   );
 }
@@ -116,7 +118,7 @@ export default function BookingPage(props: PageProps<"/booking">) {
     <AccountPage
       eyebrow="Demo booking"
       title="Book your stay"
-      description="Two quick steps. Demo only — no payment is taken."
+      description="Two quick steps. Demo only — no real money is ever taken."
     >
       <BookingContent searchParams={props.searchParams} />
     </AccountPage>

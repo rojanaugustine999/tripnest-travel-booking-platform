@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createBookingSchema, type CreateBookingInput } from "./validation";
 
 export type BookingResult =
-  | { ok: true; reference: string }
+  | { ok: true; reference: string; status: "pending" | "confirmed" }
   | { ok: false; message: string; fieldErrors?: Record<string, string>; signedOut?: boolean };
 
 /** Friendly text for the error codes raised by the `create_booking` database function. */
@@ -22,7 +22,7 @@ const DATABASE_ERRORS: Record<string, string> = {
 };
 
 /**
- * Creates a demo booking. The browser sends the stay and guest details only; the database function
+ * Creates a demo booking (confirmed at once, or pending until the test payment is made). The browser sends the stay and guest details only; the database function
  * validates them again, checks availability under a lock, works out the price and saves the booking.
  */
 export async function createBooking(input: CreateBookingInput): Promise<BookingResult> {
@@ -62,9 +62,10 @@ export async function createBooking(input: CreateBookingInput): Promise<BookingR
     return { ok: false, message: "We could not complete your booking. Please try again." };
   }
 
-  const reference = (booking as { reference?: string } | null)?.reference;
-  if (!reference) return { ok: false, message: "We could not complete your booking. Please try again." };
-  return { ok: true, reference };
+  const created = booking as { reference?: string; status?: string } | null;
+  if (!created?.reference) return { ok: false, message: "We could not complete your booking. Please try again." };
+  // 'pending' means the guest still has to pay (test payments are on); otherwise it is confirmed straight away.
+  return { ok: true, reference: created.reference, status: created.status === "pending" ? "pending" : "confirmed" };
 }
 
 export type CancelResult = { ok: true } | { ok: false; message: string };

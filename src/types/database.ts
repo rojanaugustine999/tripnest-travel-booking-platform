@@ -440,6 +440,60 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount_paise: number
+          booking_id: string
+          currency: string
+          id: string
+          is_test: boolean
+          order_id: string
+          paid_at: string
+          payment_id: string
+          provider: string
+          user_id: string
+        }
+        Insert: {
+          amount_paise: number
+          booking_id: string
+          currency?: string
+          id?: string
+          is_test?: boolean
+          order_id: string
+          paid_at?: string
+          payment_id: string
+          provider?: string
+          user_id: string
+        }
+        Update: {
+          amount_paise?: number
+          booking_id?: string
+          currency?: string
+          id?: string
+          is_test?: boolean
+          order_id?: string
+          paid_at?: string
+          payment_id?: string
+          provider?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -666,6 +720,17 @@ export type Database = {
         Args: { p_reference: string }
         Returns: Json
       }
+      confirm_booking_payment: {
+        Args: {
+          p_amount_paise: number
+          p_binding: string
+          p_order_id: string
+          p_payment_id: string
+          p_reference: string
+          p_signature: string
+        }
+        Returns: Json
+      }
       create_booking: {
         Args: {
           p_check_in: string
@@ -678,6 +743,10 @@ export type Database = {
           p_special_requests: string
         }
         Returns: Json
+      }
+      expire_pending_bookings: {
+        Args: { [_ in never]: never }
+        Returns: number
       }
       get_room_availability: {
         Args: { p_check_in: string; p_check_out: string; p_hotel_id: string }

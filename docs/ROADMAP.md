@@ -246,6 +246,15 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
 - **Result:** TripNest live on Vercel and in the portfolio.
 - **Status:** Done. Live at https://tripnest-travel-booking-platform.vercel.app (Vercel Hobby, Production, auto-deploys from `main`). See `docs/DEPLOYMENT.md`.
 
+## Phase 12 — Razorpay test-mode payments
+
+- **Objective:** Let a guest pay for a booking in Razorpay **test mode** (no real money).
+- **Tasks:** `payments` table and `confirm_booking_payment` (database verifies the HMAC signatures); pending bookings hold
+  rooms for 15 minutes; checkout popup, Pay now, receipts on user and admin pages; CSP for Razorpay; docs and tests.
+- **Depends on:** Phases 7 and 9.
+- **Verify:** test card confirms a booking; closed window leaves it pending then expired; forged calls are refused.
+- **Status:** Built. Needs the migration, keys and the database secret (see `docs/PAYMENTS.md`) before it switches on.
+
 ---
 
 ## How the phases connect

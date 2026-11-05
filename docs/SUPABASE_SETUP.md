@@ -99,7 +99,8 @@ In the Dashboard open **SQL Editor → New query**, then paste and **Run** each 
 5. `supabase/migrations/20261104092126_booking_functions.sql`
 6. `supabase/migrations/20261104093452_cancel_booking.sql`
 7. `supabase/migrations/20261104101500_admin_functions.sql`
-8. `supabase/seed.sql` (sample data, run last)
+8. `supabase/migrations/20261105100000_razorpay_payments.sql` (optional test-mode payments, see PAYMENTS.md)
+9. `supabase/seed.sql` (sample data, run last)
 
 Each should end with "Success. No rows returned".
 

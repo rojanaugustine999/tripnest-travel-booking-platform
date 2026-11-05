@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormField } from "@/components/common/form-field";
 import { FormMessage } from "@/features/auth/components/form-message";
+import { toast } from "sonner";
+import { useRazorpayCheckout } from "@/features/payments/components/use-razorpay-checkout";
 import { createBooking } from "../actions";
 import { calculateStay } from "../lib/pricing";
 import { bookingFormSchema, type BookingFormInput } from "../validation";
@@ -25,6 +27,8 @@ export type BookingFlowProps = {
   offer: HotelOffer | null;
   stay: { checkIn: string; checkOut: string; nights: number; guests: number; rooms: number };
   prefill: { fullName: string; email: string };
+  /** True when Razorpay test keys are configured: the guest pays (test mode) after confirming. */
+  testPayments: boolean;
 };
 
 const longDate = (iso: string) => format(parseISO(iso), "EEE d MMM yyyy");
@@ -33,11 +37,12 @@ const longDate = (iso: string) => format(parseISO(iso), "EEE d MMM yyyy");
  * Two steps: (1) guest details, (2) review and confirm. The price shown here is an estimate;
  * the database works out the real price when the booking is created.
  */
-export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowProps) {
+export function BookingFlow({ hotel, room, offer, stay, prefill, testPayments }: BookingFlowProps) {
   const router = useRouter();
   const [step, setStep] = useState<"details" | "review">("details");
   const [serverError, setServerError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const { pay } = useRazorpayCheckout();
   // One key per visit to this page: if the same submission is sent twice, only one booking is created.
   const [idempotencyKey] = useState(() => crypto.randomUUID());
 
@@ -90,6 +95,13 @@ export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowPr
         specialRequests: values.specialRequests,
       });
       if (result.ok) {
+        if (result.status === "pending") {
+          // Test-mode payment: open Razorpay now. Whatever happens, the confirmation page shows the real state
+          // (confirmed, or still pending with a "Pay now" button for the next 15 minutes).
+          const outcome = await pay(result.reference, { name: values.fullName, email: values.email });
+          if (outcome.status === "paid") toast.success("Payment received (test mode). Your booking is confirmed.");
+          if (outcome.status === "failed") toast.error(outcome.message);
+        }
         router.push(`/confirmation/${result.reference}`);
         return;
       }
@@ -130,10 +142,18 @@ export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowPr
 
         <div className="mb-6 flex gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
           <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-          <p>
-            <strong>Demo booking — no payment is taken</strong> and no real hotel is contacted. Please don&apos;t enter
-            card details anywhere.
-          </p>
+          {testPayments ? (
+            <p>
+              <strong>Demo with Razorpay TEST payments — no real money is taken</strong> and no real hotel is contacted.
+              In the payment window use Razorpay&apos;s test card (4111 1111 1111 1111, any future expiry and CVV) or
+              test UPI <code>success@razorpay</code>. Never enter a real card.
+            </p>
+          ) : (
+            <p>
+              <strong>Demo booking — no payment is taken</strong> and no real hotel is contacted. Please don&apos;t
+              enter card details anywhere.
+            </p>
+          )}
         </div>
 
         {serverError && (
@@ -231,7 +251,7 @@ export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowPr
                     aria-invalid={Boolean(errors.acceptDemo)}
                     {...register("acceptDemo")}
                   />
-                  <span>I understand this is a demo booking: no payment is taken and no real reservation is made.</span>
+                  <span>I understand this is a demo: no real reservation is made and no real money is charged.</span>
                 </label>
                 {errors.acceptDemo && (
                   <p role="alert" className="text-sm font-medium text-destructive">
@@ -247,7 +267,13 @@ export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowPr
                 </Button>
                 <Button type="submit" variant="cta" size="lg" disabled={pending}>
                   {pending ? <Loader2 className="animate-spin" /> : <Lock />}
-                  {pending ? "Confirming…" : "Confirm demo booking"}
+                  {pending
+                    ? testPayments
+                      ? "Processing…"
+                      : "Confirming…"
+                    : testPayments
+                      ? "Confirm and pay (test mode)"
+                      : "Confirm demo booking"}
                 </Button>
               </div>
             </div>
@@ -293,7 +319,8 @@ export function BookingFlow({ hotel, room, offer, stay, prefill }: BookingFlowPr
           <PriceBreakdown price={price} savingLabel={offer?.label} />
         </div>
         <p className="mt-4 text-xs text-muted-foreground">
-          Final price is confirmed by our server when you book. Demo — no payment taken.
+          Final price is confirmed by our server when you book.{" "}
+          {testPayments ? "Test-mode payment only." : "Demo — no payment taken."}
         </p>
       </aside>
     </div>

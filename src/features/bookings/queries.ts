@@ -14,10 +14,16 @@ const BOOKING_SELECT = `*,
   room:rooms(name, bed_info),
   booking_guests(full_name, email, phone, is_primary)`;
 
+/** Releases rooms held by bookings that were never paid. Harmless if payments are off (nothing is pending). */
+async function expireStalePending(supabase: Awaited<ReturnType<typeof createClient>>) {
+  await supabase.rpc("expire_pending_bookings");
+}
+
 export async function getMyBookings() {
   const userId = await getAuthUserId();
   if (!userId) return [];
   const supabase = await createClient();
+  await expireStalePending(supabase);
   const { data, error } = await supabase
     .from("bookings")
     .select(BOOKING_SELECT)
@@ -33,6 +39,7 @@ export async function getMyBooking(reference: string): Promise<BookingRow | null
   const userId = await getAuthUserId();
   if (!userId) return null;
   const supabase = await createClient();
+  await expireStalePending(supabase);
   const { data, error } = await supabase
     .from("bookings")
     .select(BOOKING_SELECT)

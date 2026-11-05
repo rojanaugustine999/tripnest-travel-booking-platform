@@ -6,7 +6,8 @@ A full-stack hotel booking platform built as a portfolio project: search and com
 **Live demo:** <https://tripnest-travel-booking-platform.vercel.app>
 
 > **Demo project.** All hotels, prices and reviews are fictional sample data, and bookings are demonstrations only.
-> **No payment is taken and no real hotel is contacted.** Photos are from Unsplash.
+> **No real money is taken and no real hotel is contacted** (optional Razorpay _test-mode_ payments are described in
+> [docs/PAYMENTS.md](docs/PAYMENTS.md)). Photos are from Unsplash.
 
 |                                                        |                                                   |
 | ------------------------------------------------------ | ------------------------------------------------- |
@@ -37,6 +38,8 @@ A full-stack hotel booking platform built as a portfolio project: search and com
 - Demo booking: guest details → review → confirm → confirmation with a reference. The price is calculated **on the
   server**, availability is checked under a database lock (no overbooking), and a repeated submission cannot create
   two bookings.
+- Optional **Razorpay test-mode payment**: the booking is held for 15 minutes and confirmed only after the payment's
+  signature is verified **inside the database** (see [docs/PAYMENTS.md](docs/PAYMENTS.md)). Off by default.
 - My bookings with details, price snapshot and cancellation of future bookings.
 
 **Administrators**
@@ -151,7 +154,7 @@ are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Known limitations
 
-- Payments, real hotel inventory and emails are **not** implemented (it is a demo). Supabase's built-in email service
+- Real payments, real hotel inventory and custom emails are **not** implemented (it is a demo; Razorpay is test mode only). Supabase's built-in email service
   sends 2 emails per hour; use your own SMTP for more.
 - Hotel images are Unsplash links, not uploads.
 - Search results do not filter by dates (availability is shown on the hotel and booking pages).

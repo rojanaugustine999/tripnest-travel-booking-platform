@@ -7,6 +7,8 @@ import { requireAdmin } from "@/lib/auth/session";
 import { AdminPage } from "@/features/admin/components/admin-page";
 import { BookingStatusActions } from "@/features/admin/components/booking-status-actions";
 import { getAdminBooking } from "@/features/admin/queries";
+import { PaymentSummary } from "@/features/payments/components/payment-summary";
+import { getBookingPayment } from "@/features/payments/queries";
 import { PriceBreakdown } from "@/features/bookings/components/price-breakdown";
 import { StatusBadge } from "@/features/bookings/components/status-badge";
 
@@ -19,6 +21,7 @@ async function BookingContent({ params }: { params: PageProps<"/admin/bookings/[
   await requireAdmin(`/admin/bookings/${reference}`);
   const booking = await getAdminBooking(reference);
   if (!booking) notFound();
+  const payment = await getBookingPayment(booking.id);
 
   const guests = [...booking.booking_guests].sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
 
@@ -38,8 +41,13 @@ async function BookingContent({ params }: { params: PageProps<"/admin/bookings/[
       </div>
       <div className="flex gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-        <p>Demo booking — no payment was taken.</p>
+        <p>Demo booking — no real money was taken.</p>
       </div>
+      {payment ? (
+        <PaymentSummary payment={payment} />
+      ) : (
+        booking.status === "pending" && <p className="text-sm text-muted-foreground">Waiting for the test payment.</p>
+      )}
 
       <section aria-labelledby="ab-details" className="rounded-2xl border border-border p-6">
         <h2 id="ab-details" className="text-h4">

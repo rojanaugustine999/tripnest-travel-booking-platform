@@ -54,6 +54,9 @@ want preview deployments to work):
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API Keys → **Publishable key** (`sb_publishable_…`)                 |
 | `NEXT_PUBLIC_SITE_URL`                 | Your live address, e.g. `https://tripnest-travel-booking-platform.vercel.app` (no trailing slash) |
 
+Optional, for test-mode payments only (see [PAYMENTS.md](PAYMENTS.md)): `RAZORPAY_KEY_ID` (`rzp_test_…`) and
+`RAZORPAY_KEY_SECRET`. Never use live Razorpay keys; the app ignores them.
+
 Do **not** add `SUPABASE_SECRET_KEY` — the app does not use it. `NEXT_PUBLIC_SITE_URL` matters: confirmation and
 password-reset emails use it to build their links.
 
