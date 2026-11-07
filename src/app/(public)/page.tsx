@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Image from "next/image";
 import { ArrowRight, BadgePercent, CalendarCheck, Headset, Quote, ShieldCheck, Timer } from "lucide-react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
@@ -10,14 +9,15 @@ import { Section } from "@/components/common/section";
 import { SectionHeading } from "@/components/common/section-heading";
 import { DestinationCard } from "@/features/destinations/components/destination-card";
 import { getDestinationSlugs, getPopularDestinations } from "@/features/destinations/queries";
-import { photos } from "@/features/hotels/data/photos";
 import { HotelCard } from "@/features/hotels/components/hotel-card";
 import { HotelSearchForm } from "@/features/hotels/components/hotel-search-form";
 import { OfferCard } from "@/features/hotels/components/offer-card";
 import { SearchFormFallback } from "@/features/hotels/components/search-form-fallback";
 import { getFeaturedHotels, getHotelOffers, getHotelSlugs, getSearchSuggestions } from "@/features/hotels/queries";
 import { NewsletterForm } from "@/features/marketing/components/newsletter-form";
+import { HeroSlideshow } from "@/features/marketing/components/hero-slideshow";
 import { TrustStrip } from "@/features/marketing/components/trust-strip";
+import { heroSlides } from "@/features/marketing/data/hero-slides";
 import { testimonials } from "@/features/marketing/data/testimonials";
 
 const reasons = [
@@ -57,19 +57,10 @@ export default async function HomePage() {
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <Image
-          src={photos.heroBeach}
-          alt=""
-          fill
-          preload
-
-          quality={60}
-          sizes="100vw"
-          className="-z-20 object-cover"
-        />
+        <HeroSlideshow slides={heroSlides} />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/75 via-navy-950/45 to-navy-950/80"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/75 via-navy-950/55 to-navy-950/80"
         />
         <Container className="pt-20 pb-16 sm:pt-28 sm:pb-24 lg:pt-36 lg:pb-32">
           <div className="max-w-3xl animate-fade-up">

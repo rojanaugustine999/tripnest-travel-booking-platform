@@ -25,5 +25,4 @@ export const photos = {
   roomCitySkyline: unsplash("1568495248636-6432b97bd949"),
   maldivesVillas: unsplash("1514282401047-d79a71a590e8"),
   singaporeBay: unsplash("1525625293386-3f8f99389edd"),
-  heroBeach: unsplash("1507525428034-b723cf961d3e", 2000),
 } as const;
