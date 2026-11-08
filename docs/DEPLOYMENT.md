@@ -89,6 +89,8 @@ Open the live address and check:
 - [ ] Book a room and open the confirmation page; the booking appears in **My bookings**.
 - [ ] Save and remove a hotel with the heart button.
 - [ ] `/admin` shows **404** when signed out or signed in as a normal user.
+- [ ] If payments are switched on (see [PAYMENTS.md](PAYMENTS.md)): book a room, pay with the Razorpay test card and
+      check the confirmation page shows **Confirmed** and a "Paid in Razorpay test mode" receipt.
 - [ ] Make your account admin (SQL in [SUPABASE_SETUP.md](SUPABASE_SETUP.md)) and check the admin overview.
 - [ ] Response headers contain `Content-Security-Policy` (browser dev tools → Network → any page → Headers).
 

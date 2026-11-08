@@ -253,7 +253,10 @@ Storage, Row Level Security) · Git + GitHub · Vercel. No separate Express back
   rooms for 15 minutes; checkout popup, Pay now, receipts on user and admin pages; CSP for Razorpay; docs and tests.
 - **Depends on:** Phases 7 and 9.
 - **Verify:** test card confirms a booking; closed window leaves it pending then expired; forged calls are refused.
-- **Status:** Built. Needs the migration, keys and the database secret (see `docs/PAYMENTS.md`) before it switches on.
+- **Status:** Done and live. Verified end to end on the live site with Razorpay test payments (see `docs/PAYMENTS.md`).
+- **Follow-ups shipped after Phase 12:** landing page polish (demo notice, GitHub links, social preview image, favicon),
+  design pass (stronger hero search, popular links, trust strip, shorter featured row, offers band), an auto-playing hero
+  slideshow with controls, Lighthouse fixes (accessibility 100), Vitest unit tests and refreshed README screenshots.
 
 ---
 
