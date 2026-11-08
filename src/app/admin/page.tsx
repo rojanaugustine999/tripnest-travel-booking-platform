@@ -34,8 +34,8 @@ async function OverviewContent() {
       <div className="flex gap-3 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
         <p>
-          <strong>All bookings and revenue here are demo data.</strong> No payments are taken, so these figures do not
-          represent real money.
+          <strong>All bookings and revenue here are demo data.</strong> Payments run in test mode, so these figures do
+          not represent real money.
         </p>
       </div>
 

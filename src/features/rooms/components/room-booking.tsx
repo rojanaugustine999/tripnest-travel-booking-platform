@@ -186,7 +186,7 @@ export function RoomBooking({ hotelId, hotelSlug, rooms: sampleRooms, offer }: R
 
         <p className="mt-4 flex gap-2 text-xs text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-          Taxes and fees are calculated at checkout. Demo booking — no payment is taken.
+          Taxes and fees are calculated at checkout. Demo booking — no real money is taken.
         </p>
 
         {error && (

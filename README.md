@@ -16,11 +16,6 @@ A full-stack hotel booking platform built as a portfolio project: search and com
 | ![Hotel search with filters](docs/screenshots/hotels.jpg)       | ![Hotel details and gallery](docs/screenshots/hotel-details.jpg) |
 | ![User dashboard](docs/screenshots/dashboard.jpg)               | ![Admin overview](docs/screenshots/admin-overview.jpg)           |
 
-<p align="center">
-  <img src="docs/screenshots/home-mobile.jpg" alt="Home page on a phone" width="260" /><br />
-  <sub>Responsive: the same pages on a 390 px phone screen.</sub>
-</p>
-
 ## Objectives
 
 - Build a realistic, production-style booking platform end to end: public site, accounts, bookings, payments and
@@ -68,6 +63,28 @@ A full-stack hotel booking platform built as a portfolio project: search and com
 | Guest   | `/dashboard` · `/bookings` · `/bookings/[reference]` · `/saved-hotels` · `/profile`                        | Signed-in users                     |
 | Booking | `/booking` (guest details, review, pay) · `/confirmation/[reference]`                                      | Signed-in users                     |
 | Admin   | `/admin` · `/admin/hotels` (+ new, edit, rooms) · `/admin/bookings` (+ details) · `/admin/users`           | Admins only (404 for everyone else) |
+
+## Screenshots
+
+**Browse and book**
+
+|                                                    |                                                         |
+| -------------------------------------------------- | ------------------------------------------------------- |
+| ![Destinations](docs/screenshots/destinations.jpg) | ![A destination page](docs/screenshots/destination.jpg) |
+| ![Choose a room](docs/screenshots/hotel-rooms.jpg) | ![Contact page](docs/screenshots/contact.jpg)           |
+
+**Accounts**
+
+|                                                     |                                                   |
+| --------------------------------------------------- | ------------------------------------------------- |
+| ![Create an account](docs/screenshots/register.jpg) | ![User dashboard](docs/screenshots/dashboard.jpg) |
+
+**On a phone** (390 px wide)
+
+<p>
+  <img src="docs/screenshots/home-mobile.jpg" alt="Home page on a phone" width="240" />
+  <img src="docs/screenshots/hotel-mobile.jpg" alt="Hotel page on a phone" width="240" />
+</p>
 
 ## Technology stack
 

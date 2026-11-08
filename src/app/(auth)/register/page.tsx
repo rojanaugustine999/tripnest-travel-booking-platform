@@ -21,7 +21,7 @@ export default function RegisterPage() {
     >
       <RegisterForm />
       <p className="mt-5 text-xs text-muted-foreground">
-        By creating an account you agree that TripNest is a demo project: bookings are simulated and no payment is
+        By creating an account you agree that TripNest is a demo project: bookings are simulated and no real money is
         taken.
       </p>
     </AuthCard>
